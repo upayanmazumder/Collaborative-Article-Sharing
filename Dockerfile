@@ -14,4 +14,4 @@ WORKDIR /app
 COPY . .
 
 # Run the web service on container startup
-CMD ["sh", "-c", "python -m api.deploy"]
+CMD ["sh", "-c", "python api/main.py"]
