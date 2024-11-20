@@ -13,5 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app
 COPY . .
 
+# Expose port 3000
+EXPOSE 3000
+
 # Run the web service on container startup
 CMD ["gunicorn", "-c", "api/gunicorn_config.py", "api.main:app"]
