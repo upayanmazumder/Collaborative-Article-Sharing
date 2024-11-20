@@ -1,0 +1,5 @@
+services:
+  collaborative-article-sharing:
+    image: ghcr.io/upayanmazumder/collaborative-article-sharing:latest
+    ports:
+      - "3000:3000"
