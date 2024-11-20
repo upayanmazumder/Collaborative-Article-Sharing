@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://api.collaborative-article-sharing.upayan.dev/", "http://localhost:3000/"])
+CORS(app, origins=["https://api.cas.upayan.dev/", "http://localhost:3000/"])
 
 @app.route('/')
 def home():
