@@ -6,7 +6,7 @@ WORKDIR /app
 COPY requirements.txt ./
 
 # Install dependencies for the api folder
-WORKDIR /app/
+WORKDIR /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the local code to the container image

@@ -22,10 +22,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Change directory to api
-        run: cd api
-
       - name: Build and Push Docker Image
         run: |
-          docker build . --tag ghcr.io/upayanmazumder/cas-api:latest --build-arg NODE_ENV=production
+          docker build ./api --tag ghcr.io/upayanmazumder/cas-api:latest --build-arg NODE_ENV=production
           docker push ghcr.io/upayanmazumder/cas-api:latest
