@@ -12,7 +12,7 @@ authors = [
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = ["requests","sys","argparse"]
+dependencies = ["requests","argparse"]
 
 [project.scripts]
 cas = "cas.cli:main"
