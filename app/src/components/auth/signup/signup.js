@@ -1,53 +1,48 @@
 'use client';
 
-import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../shared/firebase";
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../../shared/firebase';
 import styles from '../auth.module.css';
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setSuccess(false);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up:", userCredential.user);
+      console.log('User signed up:', userCredential.user);
       setSuccess(true);
     } catch (err) {
-      console.error("Error signing up:", err);
+      console.error('Error signing up:', err);
       setError(err.message);
     }
   };
 
   return (
-    <div className={styles.authContainer}>
-      <h2 className={styles.authHeader}>Sign Up</h2>
+    <div>
       <form className={styles.authForm} onSubmit={handleSignup}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Sign Up</button>
       </form>
       {success && <p className={`${styles.authMessage} ${styles.success}`}>Sign up successful!</p>}

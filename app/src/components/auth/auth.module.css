@@ -1,122 +1,153 @@
- 
-  /* Container for both Login and Signup forms */
   .authContainer {
-    max-width: 420px;
-    width: 100%;
-    padding: 40px;
-    background: linear-gradient(135deg, #1a1a1a, #333);
+
+    --primary-bg: #0d1117;
+    --primary-accent: #1f6feb;
+    --secondary-accent: #58a6ff;
+    --text-primary: #c9d1d9;
+    --text-secondary: #8b949e;
+    --error-color: #ff7b72;
+    --success-color: #56d364;
+    --button-hover: #30363d;
+
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 95%;
+    width: 400px;
+    background-color: var(--primary-bg);
     border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    transform: translateY(-20px);
-    animation: slideIn 0.5s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.5s ease-in-out;
   }
   
-  @keyframes slideIn {
+  .authHeader {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .authMessage {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .success {
+    color: var(--success-color);
+  }
+  
+  .error {
+    color: var(--error-color);
+  }
+  
+  .authForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .authForm label {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  
+  .authForm input {
+    padding: 10px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: #161b22;
+    border: 1px solid var(--primary-accent);
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .authForm input:focus {
+    border-color: var(--secondary-accent);
+    box-shadow: 0 0 4px var(--secondary-accent);
+  }
+  
+  .authForm button {
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--primary-accent);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .authForm button:hover {
+    background-color: var(--secondary-accent);
+  }
+  
+  .toggleContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .button {
+    flex: 1;
+    padding: 10px 0;
+    margin: 0 5px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid var(--primary-accent);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--primary-accent);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .button:hover {
+    background-color: var(--button-hover);
+    color: var(--secondary-accent);
+  }
+  
+  .active {
+    background-color: var(--primary-accent);
+    color: #fff;
+    border: none;
+  }
+  
+  @media (max-width: 768px) {
+    .authContainer {
+      width: 100%;
+      padding: 15px;
+    }
+  
+    .authHeader {
+      font-size: 20px;
+    }
+  
+    .button {
+      font-size: 13px;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-50px);
+      transform: translateY(-20px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-  
-  /* Header styles */
-  .authHeader {
-    color: #0e52a0;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    animation: fadeInText 1s ease-in-out;
-  }
-  
-  @keyframes fadeInText {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  
-  /* Form container styling */
-  .authForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .authForm input {
-    padding: 12px;
-    border: 2px solid #333;
-    border-radius: 8px;
-    background-color: #1c1c1c;
-    color: #fff;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-  }
-  
-  .authForm input:focus {
-    border-color: #0e52a0;
-    outline: none;
-    background-color: #121212;
-  }
-  
-  .authForm button {
-    padding: 14px;
-    background-color: #0e52a0;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    transform: translateY(0);
-  }
-  
-  .authForm button:hover {
-    background-color: #0c65ca;
-    transform: translateY(-2px);
-  }
-  
-  .authForm button:active {
-    transform: translateY(0);
-  }
-  
-  /* Success and error message styling */
-  .authMessage {
-    text-align: center;
-    font-size: 1rem;
-    opacity: 0;
-    animation: fadeInMessage 1s ease-in-out forwards;
-  }
-  
-  @keyframes fadeInMessage {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  
-  .success {
-    color: #00bcd4;
-  }
-  
-  .error {
-    color: #f44336;
-  }
-  
-  /* Mobile responsiveness */
-  @media (max-width: 600px) {
-    .authContainer {
-      padding: 20px;
-    }
-  
-    .authHeader {
-      font-size: 1.6rem;
-    }
-  
-    .authForm input,
-    .authForm button {
-      font-size: 0.9rem;
     }
   }
   

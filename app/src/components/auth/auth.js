@@ -10,13 +10,13 @@ import styles from './auth.module.css';
 
 const Auth = () => {
   const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(true); // Control which form to display
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
-    // Cleanup the subscription when the component is unmounted
     return () => unsubscribe();
   }, []);
 
@@ -24,14 +24,35 @@ const Auth = () => {
     <div className={styles.authContainer}>
       {user ? (
         <div>
-          <h2>Welcome, {user.email}</h2>
-          <p>You are already signed in.</p>
+          <h2 className={styles.authHeader}>Welcome, {user.email}</h2>
+          <p className={styles.authMessage}>
+            You are already signed in.
+          </p>
+          <br />
           <Logout />
         </div>
       ) : (
         <div>
-          <Login />
-          <Signup />
+          <h2 className={styles.authHeader}>
+            {showLogin ? 'Login' : 'Signup'}
+          </h2>
+          <div className={styles.toggleContainer}>
+            <button
+              className={`${styles.button} ${showLogin ? styles.active : ''}`}
+              onClick={() => setShowLogin(true)}
+            >
+              Login
+            </button>
+            <button
+              className={`${styles.button} ${!showLogin ? styles.active : ''}`}
+              onClick={() => setShowLogin(false)}
+            >
+              Signup
+            </button>
+          </div>
+          <div className={styles.authForm}>
+            {showLogin ? <Login /> : <Signup />}
+          </div>
         </div>
       )}
     </div>
