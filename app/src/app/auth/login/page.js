@@ -1,91 +1,56 @@
-"use client"
+'use client'
 
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../../shared/firebase";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess(false);
 
     try {
-      const response = await axios.post('https://api.cas.upayan.dev/auth/login', {
-        email,
-        password,
-      });
-
-      setMessage(`Login successful! Welcome, ${response.data.email}`);
-      setError(''); // Clear any previous errors
-      setEmail('');
-      setPassword('');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in:", userCredential.user);
+      setSuccess(true);
     } catch (err) {
-      setMessage('');
-      setError(err.response?.data?.error || 'An error occurred during login.');
+      console.error("Error logging in:", err);
+      setError(err.message);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', textAlign: 'center' }}>
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: '15px' }}>
+        <div>
+          <label>Email:</label>
           <input
             type="email"
-            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{
-              padding: '10px',
-              width: '100%',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-            }}
             required
           />
         </div>
-        <div style={{ marginBottom: '15px' }}>
+        <div>
+          <label>Password:</label>
           <input
             type="password"
-            placeholder="Password"
-            value={password}  // Ensure this value is bound to the state variable
-            onChange={(e) => setPassword(e.target.value)}  // Updates the password state on change
-            style={{
-              padding: '10px',
-              width: '100%',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-            }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <button
-          type="submit"
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#28a745',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
-      {message && (
-        <div style={{ marginTop: '20px', color: 'green' }}>
-          <strong>{message}</strong>
-        </div>
-      )}
-      {error && (
-        <div style={{ marginTop: '20px', color: 'red' }}>
-          <strong>{error}</strong>
-        </div>
-      )}
+      {success && <p style={{ color: "green" }}>Login successful!</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
