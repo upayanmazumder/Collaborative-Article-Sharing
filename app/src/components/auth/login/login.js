@@ -1,8 +1,9 @@
-'use client'
+'use client';
 
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../../shared/firebase";
+import styles from '../auth.module.css';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,9 +27,9 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+    <div className={styles.authContainer}>
+      <h2 className={styles.authHeader}>Login</h2>
+      <form className={styles.authForm} onSubmit={handleLogin}>
         <div>
           <label>Email:</label>
           <input
@@ -49,8 +50,8 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      {success && <p style={{ color: "green" }}>Login successful!</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p className={`${styles.authMessage} ${styles.success}`}>Login successful!</p>}
+      {error && <p className={`${styles.authMessage} ${styles.error}`}>{error}</p>}
     </div>
   );
 };
