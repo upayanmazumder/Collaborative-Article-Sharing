@@ -34,13 +34,14 @@ jobs:
 
       - name: Verify dist directory contents
         run: |
-          cd CLI
-          if [ -z "$(ls -A dist)" ]; then
+          cd /
+          dist_dir=$(find . -type d -name dist)
+          if [ -z "$(ls -A $dist_dir)" ]; then
             echo "Error: dist directory is empty."
             exit 1
           else
             echo "dist directory contains:"
-            ls -R dist
+            ls -R $dist_dir
           fi
 
       - name: Publish to PyPI
