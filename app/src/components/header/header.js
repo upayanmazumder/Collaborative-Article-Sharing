@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaLink, FaDiscord, FaCloud, FaUserPlus, FaSignInAlt } from 'react-icons/fa'; // Import FaSignInAlt for the login button
+import { FaGithub, FaLink, FaDiscord, FaCloud, FaSignInAlt } from 'react-icons/fa';
 import styles from './header.module.css';
 
 const Header = () => {
@@ -31,13 +31,9 @@ const Header = () => {
             <FaDiscord className={styles.iconStyle} />
             Discord
           </a>
-          <a href="/auth/signup" className={styles.button}> {/* Signup button */}
-            <FaUserPlus className={styles.iconStyle} />
-            Signup
-          </a>
-          <a href="/auth/login" className={styles.button}> {/* Login button */}
+          <a href="/auth" className={styles.button}>
             <FaSignInAlt className={styles.iconStyle} />
-            Login
+            Authenticate
           </a>
         </div>
       </div>
