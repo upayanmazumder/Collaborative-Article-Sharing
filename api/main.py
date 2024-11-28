@@ -1,8 +1,8 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask
 from flask_cors import CORS
 import firebase_admin
-from firebase_admin import credentials, auth, firestore
+from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file
@@ -33,42 +33,16 @@ firebase_admin.initialize_app(cred)
 # Initialize Firestore
 db = firestore.client()
 
+# Import and register blueprints
+from auth.signup import signup_bp
+from auth.login import login_bp
+
+app.register_blueprint(signup_bp)
+app.register_blueprint(login_bp)
+
 @app.route('/')
 def home():
-    return "Wgg"
-
-@app.route('/auth/signup', methods=['POST'])
-def signup():
-    try:
-        # Get the email and password from the request
-        email = request.json.get('email')
-        password = request.json.get('password')
-
-        if not email or not password:
-            return jsonify({'error': 'Email and password are required'}), 400
-        
-        # Create a new user using Firebase Authentication
-        user = auth.create_user(
-            email=email,
-            password=password
-        )
-
-        # Store user data in Firestore
-        user_ref = db.collection('users').document(user.uid)
-        user_ref.set({
-            'email': user.email,
-            'uid': user.uid,
-            'created_at': firestore.SERVER_TIMESTAMP
-        })
-
-        # Return success response
-        return jsonify({
-            'uid': user.uid,
-            'email': user.email
-        }), 201
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    return "Welcome to the Flask App"
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)

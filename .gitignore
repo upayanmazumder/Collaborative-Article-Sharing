@@ -3,3 +3,4 @@
 .venv
 
 firebase
+__pycache__
