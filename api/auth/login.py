@@ -1,4 +1,3 @@
-# FILE: auth/login.py
 from flask import Blueprint, request, jsonify
 from firebase_admin import auth
 
@@ -7,23 +6,24 @@ login_bp = Blueprint('login', __name__)
 @login_bp.route('/auth/login', methods=['POST'])
 def login():
     try:
-        # Get the email and password from the request
+        # Get the email from the request (no password needed for Firebase login)
         email = request.json.get('email')
-        password = request.json.get('password')
 
-        if not email or not password:
-            return jsonify({'error': 'Email and password are required'}), 400
+        if not email:
+            return jsonify({'error': 'Email is required'}), 400
 
-        # Verify the user using Firebase Authentication
+        # Verify if the user exists in Firebase
         user = auth.get_user_by_email(email)
 
-        # Here you would typically verify the password and generate a token
-        # For simplicity, we assume the password is correct and return user info
+        # Generate a custom token for the user
+        custom_token = auth.create_custom_token(user.uid)
 
         return jsonify({
-            'uid': user.uid,
-            'email': user.email
+            'customToken': custom_token.decode("utf-8"),  # Decode the custom token to a string
         }), 200
+
+    except auth.UserNotFoundError:
+        return jsonify({'error': 'User not found'}), 404
 
     except Exception as e:
         return jsonify({'error': str(e)}), 400
