@@ -34,7 +34,7 @@ jobs:
 
       - name: Verify dist directory contents
         run: |
-          cd /
+          cd $GITHUB_WORKSPACE
           dist_dir=$(find . -type d -name dist)
           if [ -z "$(ls -A $dist_dir)" ]; then
             echo "Error: dist directory is empty."
