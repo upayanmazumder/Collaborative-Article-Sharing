@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/')
 def home():
-    return "Welcome to the API server!"
+    return "Wgg"
 
 if __name__ == '__main__':
     cert_path = '/root/docker/cas/cert.pem'
