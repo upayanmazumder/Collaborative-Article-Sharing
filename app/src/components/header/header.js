@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGithub, FaLink, FaDiscord, FaBox } from 'react-icons/fa'; // FaBox for PyPI
+import { FaGithub, FaLink, FaDiscord, FaCloud, FaUserPlus, FaSignInAlt } from 'react-icons/fa'; // Import FaSignInAlt for the login button
 import styles from './header.module.css';
 
 const Header = () => {
@@ -18,16 +18,24 @@ const Header = () => {
             GitHub Repo
           </a>
           <a href="https://api.cas.upayan.dev" target="_blank" rel="noopener noreferrer" className={styles.button}>
-            <FaLink className={styles.iconStyle} />
+            <FaCloud className={styles.iconStyle} /> {/* FaCloud for API */}
             API Link
           </a>
           <a href="https://pypi.org/project/collaborative-article-sharing/" target="_blank" rel="noopener noreferrer" className={styles.button}>
-            <FaBox className={styles.iconStyle} /> {/* FaBox for PyPI */}
+            <FaLink className={styles.iconStyle} />
             Pypi Repository
           </a>
           <a href="https://discord.gg/wQTZcXpcaY" target="_blank" rel="noopener noreferrer" className={styles.button}>
             <FaDiscord className={styles.iconStyle} />
             Discord
+          </a>
+          <a href="/auth/signup" className={styles.button}> {/* Signup button */}
+            <FaUserPlus className={styles.iconStyle} />
+            Signup
+          </a>
+          <a href="/auth/login" className={styles.button}> {/* Login button */}
+            <FaSignInAlt className={styles.iconStyle} />
+            Login
           </a>
         </div>
       </div>
