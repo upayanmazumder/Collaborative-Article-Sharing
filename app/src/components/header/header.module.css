@@ -1,0 +1,53 @@
+.header {
+    background-color: #121212;
+    color: #fff;
+    padding: 20px;
+    border-bottom: 2px solid #444;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logoContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon {
+    width: 40px; /* Adjust size of the logo */
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .title {
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .button {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #555;
+  }
+  
+  .iconStyle {
+    margin-right: 8px;
+  }
+  
