@@ -1,37 +1,36 @@
 import argparse
-import requests
-import sys
+from auth import signup_user, login_user
 
-API_BASE_URL = "https://api.cas.upayan.dev"
-SIGNUP_ENDPOINT = f"{API_BASE_URL}/auth/signup"
-
-def signup_user(email, password):
+def prompt_for_credentials():
     """
-    Sends a signup request to the API.
+    Prompts the user for email and password if not provided via command-line arguments.
     """
-    try:
-        response = requests.post(
-            SIGNUP_ENDPOINT,
-            json={"email": email, "password": password},
-        )
-        if response.status_code == 201:
-            print(f"User signed up successfully!\n{response.json()}")
-        else:
-            print(f"Failed to sign up user.\nError: {response.json().get('error', 'Unknown error')}")
-    except requests.exceptions.RequestException as e:
-        print(f"Error connecting to the API: {e}")
-        sys.exit(1)
+    email = input("Enter email: ")
+    password = input("Enter password: ")
+    return email, password
 
 def main():
-    parser = argparse.ArgumentParser(description="CLI tool for signing up users.")
+    parser = argparse.ArgumentParser(description="CLI tool for user authentication.")
     parser.add_argument(
         "action",
-        choices=["signup"],
-        help="Action to perform. Currently supports only 'signup'."
+        choices=["signup", "login"],
+        help="Action to perform. Choose either 'signup' or 'login'."
     )
-    parser.add_argument("-e", "--email", required=True, help="Email address of the user.")
-    parser.add_argument("-p", "--password", required=True, help="Password for the user.")
+    parser.add_argument("-e", "--email", help="Email address of the user.")
+    parser.add_argument("-p", "--password", help="Password for the user.")
     args = parser.parse_args()
 
+    # If email or password are not provided via command-line, ask for them interactively.
+    if not args.email or not args.password:
+        print("Email and/or password not provided via command-line arguments.")
+        email, password = prompt_for_credentials()
+    else:
+        email, password = args.email, args.password
+
     if args.action == "signup":
-        signup_user(args.email, args.password)
+        signup_user(email, password)
+    elif args.action == "login":
+        login_user(email, password)
+
+if __name__ == "__main__":
+    main()
