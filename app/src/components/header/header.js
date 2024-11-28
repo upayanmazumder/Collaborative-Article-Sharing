@@ -6,11 +6,13 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logoContainer}>
-          {/* Image is served from '/cas.svg' */}
-          <img src="/cas.svg" alt="CAS Logo" className={styles.icon} />
-          <h1 className={styles.title}>CAS</h1>
-        </div>
+        <a href="/">
+            <div className={styles.logoContainer}>
+            {/* Image is served from '/cas.svg' */}
+            <img src="/cas.svg" alt="CAS Logo" className={styles.icon} />
+            <h1 className={styles.title}>CAS</h1>
+            </div>
+        </a>
         <div className={styles.buttonContainer}>
           {/* Buttons for links */}
           <a href="https://github.com/upayanmazumder/Collaborative-Article-Sharing" target="_blank" rel="noopener noreferrer" className={styles.button}>
