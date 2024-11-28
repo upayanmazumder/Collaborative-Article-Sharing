@@ -1,3 +1,3 @@
 services:
-  cas:
+  cas-api:
     image: ghcr.io/upayanmazumder/cas-api:latest
