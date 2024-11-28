@@ -4,3 +4,6 @@
 
 firebase
 __pycache__
+
+cas.egg-info
+dist
