@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cas"
+name = "collaborative-article-sharing"
 version = "0.1.0"
 description = "Command-line interface for interacting with the CAS API"
 authors = [
