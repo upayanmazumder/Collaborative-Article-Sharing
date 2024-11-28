@@ -33,7 +33,7 @@ jobs:
           python -m build --outdir dist
 
       - name: List dist directory contents
-        run: ls -R CLI/dist
+        run: ls -R dist
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
