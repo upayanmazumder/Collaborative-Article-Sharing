@@ -1,1 +1,5 @@
 .vscode/settings.json
+.env
+.venv
+
+firebase
