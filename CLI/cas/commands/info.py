@@ -1,18 +1,20 @@
 from rich.console import Console
-from rich.text import Text
+from rich.markdown import Markdown
 
 console = Console()
 
 def info_command():
-    info_text = Text("""
-Project Information:
-    GitHub Repo: https://github.com/upayanmazumder/Collaborative-Article-Sharing
-    PyPI Repo: https://pypi.org/project/collaborative-article-sharing/
-    Discord: https://discord.gg/wQTZcXpcaY
-    Website: https://cas.upayan.dev
+    info_text = Markdown("""
+# **Project Information:**
+- [GitHub Repo](https://github.com/upayanmazumder/Collaborative-Article-Sharing)
+- [PyPI Repo](https://pypi.org/project/collaborative-article-sharing/)
+- [Discord](https://discord.gg/wQTZcXpcaY)
+- [Website](https://cas.upayan.dev)
 
-Developer Information:
-    Name: Upayan Mazumder
-    My Site: https://upayan.dev
-""", style="bold yellow")
+**Made with love by**
+[Upayan Mazumder](https://upayan.dev)
+""")
     console.print(info_text)
+
+if __name__ == "__main__":
+    info_command()
