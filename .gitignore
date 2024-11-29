@@ -7,3 +7,4 @@ __pycache__
 
 cas.egg-info
 dist
+CLI/cas/session_details.json
