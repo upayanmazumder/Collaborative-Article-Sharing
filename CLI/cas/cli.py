@@ -1,15 +1,50 @@
+import os
+import json
 import webbrowser
-from flask import Flask
-from auth import auth_bp, load_session_details
+from flask import Flask, Blueprint, request, jsonify
 import requests
 import sys
 
+# Define the auth blueprint and session management functions
+auth_bp = Blueprint("auth", __name__)
+session_file = "session.json"
+
+def load_session_details():
+    if os.path.exists(session_file):
+        with open(session_file, "r") as f:
+            return json.load(f)
+    return {}
+
+def save_session_details(details):
+    with open(session_file, "w") as f:
+        json.dump(details, f)
+
+@auth_bp.route("/")
+def handle_auth_response():
+    email = request.args.get("email", "")
+    token = request.args.get("token", "")
+
+    # Only update session details if email and token are present
+    if email and token:
+        session_details = {"email": email, "token": token}
+        save_session_details(session_details)
+        print("Session details saved:", session_details)
+    else:
+        print("Invalid or empty session details, skipping update.")
+
+    return jsonify({"status": "ok", "session_details": load_session_details()})
+
+@auth_bp.route("/favicon.ico")
+def favicon():
+    return "", 200  # Prevent favicon requests from interfering
+
+# Initialize Flask app
 app = Flask(__name__)
 
 # Register the auth blueprint
 app.register_blueprint(auth_bp)
 
-
+# Add message function to interact with the API
 def add_message(message):
     """
     Adds a message to the user's database entry using the API.
@@ -33,7 +68,7 @@ def add_message(message):
     except requests.RequestException as e:
         print("Error while communicating with the API:", e)
 
-
+# Main execution flow
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "add-message":
         if len(sys.argv) < 3:
