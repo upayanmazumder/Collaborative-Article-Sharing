@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
 import React, { useEffect } from "react";
-import { getAuth } from "firebase/auth";
+import { auth } from "../../../../shared/firebase"; // Adjust path as needed
 
 const Connect = () => {
   useEffect(() => {
     const authenticate = async () => {
       try {
-        const auth = getAuth();
         const user = auth.currentUser;
 
         if (user) {
