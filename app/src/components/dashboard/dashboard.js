@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
-import Dashboard from '../../components/dashboard/dashboard';
 import Image from 'next/image';
 
 export default function Home() {
@@ -51,7 +50,6 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <Dashboard />
         {loading ? (
           <p>Loading articles...</p>
         ) : error ? (
