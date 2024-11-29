@@ -69,12 +69,14 @@ try:
     from auth.group.create import create_group_bp
     from auth.group.delete import delete_group_bp
     from auth.group.privacy import privacy_group_bp
+    from auth.group.list import list_group_bp
 
     app.register_blueprint(signup_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(create_group_bp)
     app.register_blueprint(delete_group_bp)
     app.register_blueprint(privacy_group_bp)
+    app.register_blueprint(list_group_bp)
     print("Auth blueprints registered successfully.")
 except ImportError as e:
     print(f"Error importing blueprints: {e}")
