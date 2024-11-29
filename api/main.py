@@ -164,4 +164,4 @@ def get_articles():
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 3000))  # Default to port 3000 if not specified
     debug_mode = os.getenv("FLASK_DEBUG", "False").lower() in ["true", "1", "t"]
-    app.run(debug=debug_mode, port=port)
+    app.run(debug=True, port=port)
