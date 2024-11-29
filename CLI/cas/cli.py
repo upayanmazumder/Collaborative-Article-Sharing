@@ -102,8 +102,13 @@ def pull_articles():
                 table = Table(show_header=True, header_style="bold magenta")
                 table.add_column("Index", style="dim")
                 table.add_column("Article")
-                for i, article in enumerate(articles, 1):
-                    table.add_row(str(i), article)
+                table.add_column("Message", style="italic")
+
+                for i, article_data in enumerate(articles, 1):
+                    article = article_data.get("article", "No URL provided")
+                    message = article_data.get("message", "No message provided")
+                    table.add_row(str(i), article, message)
+
                 console.print(table)
             else:
                 console.print("[bold yellow]⚠ You have no articles.[/]")
@@ -115,11 +120,11 @@ def pull_articles():
 def show_help():
     help_text = Text("""
 Usage:
-    cas info                            Show project and developer information.
-    cas help                            Show this help article.
-    cas auth                            Start authentication process.
-    cas push <article-link>             Add an article.
-    cas pull                            Retrieve your articles.
+    cas info                                    Show project and developer information.
+    cas help                                    Show this help article.
+    cas auth                                    Start authentication process.
+    cas push <article-link> [-m <message>]      Add an article with an optional message.
+    cas pull                                    Retrieve your articles.
 """, style="bold cyan")
     console.print(help_text)
 
@@ -142,7 +147,7 @@ def main():
         show_help()
     elif sys.argv[1] == "push":
         if len(sys.argv) < 3:
-            console.print("[bold red]Usage: cas push <article-link> [-m <message>][/]")
+            console.print("[bold red]Usage: cas push <article-link> [-m <message>][/] ")
         else:
             article = None
             message = None
@@ -172,7 +177,6 @@ def main():
         show_info()
     else:
         show_help()
-
 
 if __name__ == "__main__":
     main()
