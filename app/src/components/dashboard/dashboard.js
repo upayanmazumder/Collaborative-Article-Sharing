@@ -1,57 +1,76 @@
-'use client';
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
-import { auth } from '../../../shared/firebase';
-import Logout from '../auth/logout/logout';
-import styles from './dashboard.module.css';
+import { useEffect, useState } from "react";
+import styles from "./dashboard.module.css";
+import Dashboard from "../../components/dashboard/dashboard";
 
-const Dashboard = () => {
-  const [user, setUser] = useState(null);
-  const router = useRouter();
+export default function Home() {
+  const [articles, setArticles] = useState<string>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Listen to authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        router.push('/auth'); // Redirect to auth page if no user is logged in
+    // Get Firebase ID token for authentication
+    const fetchArticles = async () => {
+      try {
+        // Assuming Firebase is initialized and Firebase Auth is available
+        const user = await firebase.auth().currentUser;
+        
+        if (user) {
+          const idToken = await user.getIdToken();
+
+          // Fetch articles from the API
+          const response = await fetch("https://api.cas.upayan.dev/pull", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch articles");
+          }
+
+          const data = await response.json();
+          if (data.success) {
+            setArticles(data.articles);
+          } else {
+            setError("No articles found");
+          }
+        } else {
+          setError("User is not signed in");
+        }
+      } catch (err) {
+        setError(err.message || "An error occurred while fetching articles");
+      } finally {
+        setLoading(false);
       }
-    });
+    };
 
-    return () => unsubscribe();
-  }, [router]);
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      router.push('/auth'); // Redirect to auth page after logout
-    } catch (error) {
-      console.error('Logout failed:', error.message);
-    }
-  };
+    fetchArticles();
+  }, []);
 
   return (
-    <div className={styles.dashboardContainer}>
-      {user ? (
-        <div>
-          <h2 className={styles.dashboardHeader}>Welcome to your Dashboard, {user.email}</h2>
-          <div className={styles.dashboardContent}>
-            <p className={styles.dashboardMessage}>Here you can manage your account, settings, and more.</p>
-            <br />
-            <Logout onLogout={handleLogout} />
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <Dashboard />
+        {loading ? (
+          <p>Loading articles...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : articles.length === 0 ? (
+          <p>No articles available</p>
+        ) : (
+          <div>
+            <h2>Your Articles</h2>
+            <ul>
+              {articles.map((article, index) => (
+                <li key={index}>{article}</li>
+              ))}
+            </ul>
           </div>
-        </div>
-      ) : (
-        <div>
-          <h2 className={styles.dashboardHeader}>Loading...</h2>
-        </div>
-      )}
+        )}
+      </main>
     </div>
   );
-};
-
-export default Dashboard;
+}
