@@ -5,7 +5,7 @@ import time
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 API_BASE_URL = "https://cas.upayan.dev"
-LOGIN_ENDPOINT = f"{API_BASE_URL}/auth/login"
+LOGIN_ENDPOINT = f"{API_BASE_URL}/auth"
 
 class AuthCallbackHandler(BaseHTTPRequestHandler):
     """
