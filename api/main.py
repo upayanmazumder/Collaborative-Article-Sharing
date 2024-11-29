@@ -80,7 +80,7 @@ def home():
 @app.route('/push', methods=['POST'])
 def add_article():
     """
-    Route to add an article (link) to the user's data.
+    Route to add an article (link) to the user's data, with an optional message.
     Requires the user to be authenticated using a Firebase token.
     """
     # Retrieve the Firebase ID token from the Authorization header
@@ -94,25 +94,31 @@ def add_article():
         decoded_token = auth.verify_id_token(id_token)
         user_id = decoded_token['uid']
 
-        # Get the article from the request body
+        # Get the article and optional message from the request body
         article_data = request.json
         if not article_data or 'article' not in article_data:
             return jsonify({"error": "Missing 'article' in request body"}), 400
 
         article = article_data['article']
+        message = article_data.get('message')  # Optional field
 
         # Check if the article is a valid URL
         parsed_url = urlparse(article)
         if not parsed_url.scheme or not parsed_url.netloc:
             return jsonify({"error": "Invalid URL provided"}), 400
 
-        # Store the article in Firestore under the user's collection
+        # Prepare the entry to be stored
+        entry = {"article": article}
+        if message:
+            entry["message"] = message
+
+        # Store the article and message in Firestore under the user's collection
         if db:
             user_ref = db.collection('users').document(user_id)
             user_ref.update({
-                'articles': firestore.ArrayUnion([article])
+                'articles': firestore.ArrayUnion([entry])  # Store as an array of objects
             })
-            return jsonify({"success": True, "article": "article added successfully"}), 200
+            return jsonify({"success": True, "message": "Article added successfully"}), 200
         else:
             return jsonify({"error": "Firestore database is not initialized"}), 500
     except auth.InvalidIdTokenError:
