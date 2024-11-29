@@ -39,10 +39,10 @@ def handle_auth_response():
 def favicon():
     return "", 200  # Prevent favicon requests from interfering
 
-# Add message function to interact with the API
-def add_message(message):
+# Add article function to interact with the API
+def add_article(article):
     """
-    Adds a message to the user's database entry using the API.
+    Adds a article to the user's database entry using the API.
     Ensures the user is logged in before proceeding.
     """
     session_details = load_session_details()
@@ -52,26 +52,26 @@ def add_message(message):
 
     api_url = "https://api.cas.upayan.dev/push"
     headers = {"Authorization": session_details["token"]}
-    payload = {"message": message}
+    payload = {"article": article}
 
     try:
         response = requests.post(api_url, json=payload, headers=headers)
         if response.status_code == 200:
-            print("Message added successfully:", response.json())
+            print("Article added successfully:", response.json())
         else:
-            print("Failed to add message. Error:", response.json())
+            print("Failed to add article. Error:", response.json())
     except requests.RequestException as e:
         print("Error while communicating with the API:", e)
 
-# Show help message
+# Show help article
 def show_help():
-    help_message = """
+    help_article = """
     Usage:
-        cas help                            Show this help message.
+        cas help                            Show this help article.
         cas auth                            Start authentication process.
         cas push <article-link>             Add an article.
     """
-    print(help_message)
+    print(help_article)
 
 # Main function to handle CLI and web server logic
 def main():
@@ -81,8 +81,8 @@ def main():
         if len(sys.argv) < 3:
             print("Usage: cas push <article-link>")
         else:
-            message = " ".join(sys.argv[2:])
-            add_message(message)
+            article = " ".join(sys.argv[2:])
+            add_article(article)
     elif sys.argv[1] == "help":
         show_help()
     elif sys.argv[1] == "auth":

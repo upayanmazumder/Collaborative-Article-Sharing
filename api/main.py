@@ -79,9 +79,9 @@ def home():
 
 
 @app.route('/push', methods=['POST'])
-def add_message():
+def add_article():
     """
-    Route to add a message to the user's data.
+    Route to add a article to the user's data.
     Requires the user to be authenticated using a Firebase token.
     """
     # Retrieve the Firebase ID token from the Authorization header
@@ -95,20 +95,20 @@ def add_message():
         decoded_token = auth.verify_id_token(id_token)
         user_id = decoded_token['uid']
 
-        # Get the message from the request body
-        message_data = request.json
-        if not message_data or 'message' not in message_data:
-            return jsonify({"error": "Missing 'message' in request body"}), 400
+        # Get the article from the request body
+        article_data = request.json
+        if not article_data or 'article' not in article_data:
+            return jsonify({"error": "Missing 'article' in request body"}), 400
 
-        message = message_data['message']
+        article = article_data['article']
 
-        # Store the message in Firestore under the user's collection
+        # Store the article in Firestore under the user's collection
         if db:
             user_ref = db.collection('users').document(user_id)
             user_ref.update({
-                'messages': firestore.ArrayUnion([message])
+                'articles': firestore.ArrayUnion([article])
             })
-            return jsonify({"success": True, "message": "Message added successfully"}), 200
+            return jsonify({"success": True, "article": "article added successfully"}), 200
         else:
             return jsonify({"error": "Firestore database is not initialized"}), 500
     except auth.InvalidIdTokenError:
