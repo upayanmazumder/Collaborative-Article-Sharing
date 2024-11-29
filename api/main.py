@@ -72,16 +72,14 @@ try:
 except ImportError as e:
     print(f"Error importing blueprints: {e}")
 
-
 @app.route('/')
 def home():
     return "Welcome to the Flask App"
 
-
 @app.route('/push', methods=['POST'])
 def add_article():
     """
-    Route to add a article to the user's data.
+    Route to add an article to the user's data.
     Requires the user to be authenticated using a Firebase token.
     """
     # Retrieve the Firebase ID token from the Authorization header
@@ -116,6 +114,40 @@ def add_article():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/pull', methods=['GET'])
+def get_articles():
+    """
+    Route to retrieve all articles for the authenticated user.
+    Requires the user to be authenticated using a Firebase token.
+    """
+    # Retrieve the Firebase ID token from the Authorization header
+    id_token = request.headers.get('Authorization')
+
+    if not id_token:
+        return jsonify({"error": "Missing Firebase ID token"}), 401
+
+    try:
+        # Verify the Firebase ID token
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token['uid']
+
+        # Retrieve the user's data from Firestore
+        if db:
+            user_ref = db.collection('users').document(user_id)
+            user_data = user_ref.get()
+
+            if user_data.exists:
+                # Assuming articles are stored in a field called 'articles'
+                articles = user_data.to_dict().get('articles', [])
+                return jsonify({"success": True, "articles": articles}), 200
+            else:
+                return jsonify({"error": "User data not found"}), 404
+        else:
+            return jsonify({"error": "Firestore database is not initialized"}), 500
+    except auth.InvalidIdTokenError:
+        return jsonify({"error": "Invalid Firebase ID token"}), 401
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 3000))  # Default to port 3000 if not specified
