@@ -9,15 +9,30 @@ from .commands.group_create import group_create_command
 from .commands.group_delete import group_delete_command
 from .commands.group_privacy import group_privacy_command
 from .commands.group_list import group_list_command
+from .session_utils import load_session_details
 
 # Initialize Rich Console
 console = Console()
+
+def is_user_authenticated():
+    session_details = load_session_details()
+    if not session_details:
+        console.print("[bold red]❌ Error: User is not logged in. Please log in first using [bold green]cas auth.[/]")
+        return False
+    return True
 
 def main():
     if len(sys.argv) < 2:
         help_command()
     else:
         command = sys.argv[1].lower()
+        
+        # Check authentication for restricted commands
+        authenticated_commands = ["push", "pull", "group:create", "group:delete", "group:privacy", "group:list"]
+        if command in authenticated_commands and not is_user_authenticated():
+            return
+
+        # Command dispatch
         if command == "auth":
             auth_command()
         elif command == "info":
