@@ -1,9 +1,11 @@
+'use client'
+
 import { useEffect, useState } from "react";
 import styles from "../page.module.css";
 import Dashboard from "../../components/dashboard/dashboard";
 
 export default function Home() {
-  const [articles, setArticles] = useState<string[]>([]);
+  const [articles, setArticles] = useState<string>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
