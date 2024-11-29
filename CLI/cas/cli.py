@@ -3,7 +3,7 @@ import json
 import webbrowser
 import sys
 import requests
-from flask import Flask, Blueprint, request, jsonify
+from flask import Flask, Blueprint, request, jsonify, redirect
 
 # Define the auth blueprint and session management functions
 auth_bp = Blueprint("auth", __name__)
@@ -32,7 +32,8 @@ def handle_auth_response():
     else:
         print("Invalid or empty session details, skipping update.")
 
-    return jsonify({"status": "ok", "session_details": load_session_details()})
+    # Redirect user to the success page after successful auth
+    return redirect("https://cas.upayan.dev/connect/success")
 
 @auth_bp.route("/favicon.ico")
 def favicon():
@@ -62,14 +63,27 @@ def add_message(message):
     except requests.RequestException as e:
         print("Error while communicating with the API:", e)
 
+# Show help message
+def show_help():
+    help_message = """
+    Usage:
+        cli.py add-message <your-message>      Add a message to the database (requires login).
+        cli.py help                            Show this help message.
+    """
+    print(help_message)
+
 # Main function to handle CLI and web server logic
 def main():
-    if len(sys.argv) > 1 and sys.argv[1] == "add-message":
+    if len(sys.argv) < 2:
+        show_help()
+    elif sys.argv[1] == "add-message":
         if len(sys.argv) < 3:
             print("Usage: cli.py add-message <your-message>")
         else:
             message = " ".join(sys.argv[2:])
             add_message(message)
+    elif sys.argv[1] == "help":
+        show_help()
     else:
         url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
         webbrowser.open(url)
