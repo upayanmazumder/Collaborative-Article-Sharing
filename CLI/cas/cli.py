@@ -112,12 +112,27 @@ def pull_articles():
 def show_help():
     help_text = Text("""
 Usage:
+    cas info                            Show project and developer information.
     cas help                            Show this help article.
     cas auth                            Start authentication process.
     cas push <article-link>             Add an article.
     cas pull                            Retrieve your articles.
 """, style="bold cyan")
     console.print(help_text)
+
+def show_info():
+    info_text = Text("""
+Project Information:
+    GitHub Repo: https://github.com/upayanmazumder/Collaborative-Article-Sharing
+    PyPI Repo: https://pypi.org/project/collaborative-article-sharing/
+    Discord: https://discord.gg/wQTZcXpcaY
+    Website: https://cas.upayan.dev
+
+Developer Information:
+    Name: Upayan Mazumder
+    My Site: https://upayan.dev
+""", style="bold yellow")
+    console.print(info_text)
 
 def main():
     if len(sys.argv) < 2:
@@ -139,6 +154,8 @@ def main():
         app = Flask(__name__)
         app.register_blueprint(auth_bp)
         app.run(port=8000)
+    elif sys.argv[1] == "info":
+        show_info()
     else:
         show_help()
 
