@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "collaborative-article-sharing"
-version = "0.1.0-beta.4"
+version = "0.1.0-beta.5"
 description = "Command-line interface for interacting with the CAS API"
 authors = [
     { name = "upayan", email = "upayanm3@gmail.com" }
@@ -12,7 +12,10 @@ authors = [
 license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = ["requests","argparse","rich","flask"]
+dependencies = ["requests", "argparse", "rich", "flask"]
+
+[tool.setuptools.packages.find]
+include = ["cas", "cas.commands"]
 
 [project.scripts]
 cas = "cas.cli:main"
