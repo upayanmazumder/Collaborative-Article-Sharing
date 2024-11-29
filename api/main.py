@@ -162,6 +162,5 @@ def get_articles():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.getenv("PORT", 3000))  # Default to port 3000 if not specified
-    debug_mode = os.getenv("FLASK_DEBUG", "False").lower() in ["true", "1", "t"]
+    port = int(3000)
     app.run(debug=True, port=port)
