@@ -37,8 +37,7 @@ const Connect = () => {
 
     const isValidRedirectUri = (uri) => {
       const allowedRedirectUris = [
-        'https://trusted.example.com/callback',
-        'https://another-trusted.example.com/callback'
+        'https://cas.upayan.dev/callback',
       ];
       return allowedRedirectUris.includes(uri);
     };
