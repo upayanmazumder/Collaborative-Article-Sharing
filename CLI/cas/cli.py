@@ -4,6 +4,13 @@ import webbrowser
 import sys
 import requests
 from flask import Flask, Blueprint, request, jsonify, redirect
+import re
+from rich.console import Console
+from rich.text import Text
+from rich.table import Table
+
+# Initialize Rich Console
+console = Console()
 
 # Define the auth blueprint and session management functions
 auth_bp = Blueprint("auth", __name__)
@@ -24,30 +31,35 @@ def handle_auth_response():
     email = request.args.get("email", "")
     token = request.args.get("token", "")
 
-    # Only update session details if email and token are present
     if email and token:
         session_details = {"email": email, "token": token}
         save_session_details(session_details)
-        print("Session details saved:", session_details)
+        console.print(f"[bold green]✔ Session details saved:[/] {session_details}")
     else:
-        print("Invalid or empty session details, skipping update.")
+        console.print("[bold red]❌ Invalid or empty session details, skipping update.")
 
-    # Redirect user to the success page after successful auth
     return redirect("https://cas.upayan.dev/auth/connect/success")
 
 @auth_bp.route("/favicon.ico")
 def favicon():
-    return "", 200  # Prevent favicon requests from interfering
+    return "", 200
 
-# Add article function to interact with the API
+def is_valid_url(url):
+    url_regex = re.compile(
+        r'^(https?:\/\/)?'
+        r'([\da-z\.-]+)\.([a-z\.]{2,6})'
+        r'([\/\w \.-]*)*\/?$'
+    )
+    return re.match(url_regex, url) is not None
+
 def add_article(article):
-    """
-    Adds an article to the user's database entry using the API.
-    Ensures the user is logged in before proceeding.
-    """
+    if not is_valid_url(article):
+        console.print("[bold red]❌ Error:[/] The provided article is not a valid link.")
+        return
+
     session_details = load_session_details()
     if not session_details or "email" not in session_details or "token" not in session_details:
-        print("Error: User is not logged in. Please log in first.")
+        console.print("[bold red]❌ Error:[/] User is not logged in. Please log in first.")
         return
 
     api_url = "https://api.cas.upayan.dev/push"
@@ -57,21 +69,20 @@ def add_article(article):
     try:
         response = requests.post(api_url, json=payload, headers=headers)
         if response.status_code == 200:
-            print("Article added successfully:", response.json())
+            data = response.json()
+            if data.get("success"):
+                console.print("[bold green]✔ Article added successfully![/]")
+            else:
+                console.print(f"[bold red]❌ Failed to add article. Reason:[/] {data.get('message', 'Unknown error.')}")
         else:
-            print("Failed to add article. Error:", response.json())
+            console.print(f"[bold red]❌ Failed to add article. Status Code:[/] {response.status_code}")
     except requests.RequestException as e:
-        print("Error while communicating with the API:", e)
+        console.print(f"[bold red]❌ Error while communicating with the API:[/] {e}")
 
-# Pull articles function to interact with the API
 def pull_articles():
-    """
-    Retrieves the articles of the authenticated user from the API.
-    Ensures the user is logged in before proceeding.
-    """
     session_details = load_session_details()
     if not session_details or "email" not in session_details or "token" not in session_details:
-        print("Error: User is not logged in. Please log in first.")
+        console.print("[bold red]❌ Error:[/] User is not logged in. Please log in first.")
         return
 
     api_url = "https://api.cas.upayan.dev/pull"
@@ -82,34 +93,36 @@ def pull_articles():
         if response.status_code == 200:
             articles = response.json().get("articles", [])
             if articles:
-                print("Your Articles:")
-                for article in articles:
-                    print(f"- {article}")
+                console.print("[bold blue]Your Articles:[/]")
+                table = Table(show_header=True, header_style="bold magenta")
+                table.add_column("Index", style="dim")
+                table.add_column("Article")
+                for i, article in enumerate(articles, 1):
+                    table.add_row(str(i), article)
+                console.print(table)
             else:
-                print("You have no articles.")
+                console.print("[bold yellow]⚠ You have no articles.[/]")
         else:
-            print("Failed to retrieve articles. Error:", response.json())
+            console.print("[bold red]❌ Failed to retrieve articles. Error:[/]", response.json())
     except requests.RequestException as e:
-        print("Error while communicating with the API:", e)
+        console.print(f"[bold red]❌ Error while communicating with the API:[/] {e}")
 
-# Show help article
 def show_help():
-    help_article = """
-    Usage:
-        cas help                            Show this help article.
-        cas auth                            Start authentication process.
-        cas push <article-link>             Add an article.
-        cas pull                            Retrieve your articles.
-    """
-    print(help_article)
+    help_text = Text("""
+Usage:
+    cas help                            Show this help article.
+    cas auth                            Start authentication process.
+    cas push <article-link>             Add an article.
+    cas pull                            Retrieve your articles.
+""", style="bold cyan")
+    console.print(help_text)
 
-# Main function to handle CLI and web server logic
 def main():
     if len(sys.argv) < 2:
         show_help()
     elif sys.argv[1] == "push":
         if len(sys.argv) < 3:
-            print("Usage: cas push <article-link>")
+            console.print("[bold red]Usage: cas push <article-link>[/]")
         else:
             article = " ".join(sys.argv[2:])
             add_article(article)
@@ -120,13 +133,12 @@ def main():
     elif sys.argv[1] == "auth":
         url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
         webbrowser.open(url)
-        print("Starting server on http://localhost:8000")
+        console.print("[bold green]Starting server on [link=http://localhost:8000]http://localhost:8000[/link]")
         app = Flask(__name__)
         app.register_blueprint(auth_bp)
         app.run(port=8000)
     else:
         show_help()
 
-# Entry point for CLI commands
 if __name__ == "__main__":
     main()
