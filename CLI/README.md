@@ -1,4 +1,4 @@
-# Collaborative-Article-Sharing
+# Collaborative-Article-Sharing CLI
 
 A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Article-Sharing](https://github.com/upayanmazumder/Collaborative-Article-Sharing) project.
 
