@@ -35,7 +35,6 @@ def create_group():
         group_name = group_data['group_name']
         description = group_data.get('description')  # Optional field
 
-        # Generate a unique group ID (could use a Firestore auto-generated ID)
         group_id = db.collection('groups').document().id
 
         # Prepare the group entry

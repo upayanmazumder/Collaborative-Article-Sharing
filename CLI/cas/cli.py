@@ -5,6 +5,7 @@ from commands.info import info_command
 from commands.help import help_command
 from commands.push import push_command
 from commands.pull import pull_command
+from commands.group_create import group_create_command
 
 # Initialize Rich Console
 console = Console()
@@ -24,6 +25,8 @@ def main():
             push_command(sys.argv[2:])
         elif command == "pull":
             pull_command()
+        elif command == "group:create":
+            group_create_command()
         else:
             console.print("[bold red]❌ Unknown command. Use 'cas help' for a list of commands.[/]")
 
