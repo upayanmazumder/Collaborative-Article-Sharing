@@ -18,13 +18,13 @@ const Connect = () => {
             const params = new URLSearchParams(window.location.search);
             const redirectUri = params.get("redirect_uri");
 
-            if (redirectUri) {
+            if (redirectUri && isValidRedirectUri(redirectUri)) {
               const redirectUrl = `${redirectUri}?email=${encodeURIComponent(
                 email
               )}&token=${encodeURIComponent(token)}`;
               window.location.href = redirectUrl;
             } else {
-              console.error("Missing redirect URI.");
+              console.error("Invalid or missing redirect URI.");
             }
           } else {
             console.error("No user is signed in.");
@@ -33,6 +33,14 @@ const Connect = () => {
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
+    };
+
+    const isValidRedirectUri = (uri) => {
+      const allowedRedirectUris = [
+        'https://trusted.example.com/callback',
+        'https://another-trusted.example.com/callback'
+      ];
+      return allowedRedirectUris.includes(uri);
     };
 
     authenticate();
