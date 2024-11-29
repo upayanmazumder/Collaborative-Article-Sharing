@@ -1,8 +1,8 @@
 import os
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file
@@ -72,9 +72,50 @@ try:
 except ImportError as e:
     print(f"Error importing blueprints: {e}")
 
+
 @app.route('/')
 def home():
     return "Welcome to the Flask App"
+
+
+@app.route('/add-message', methods=['POST'])
+def add_message():
+    """
+    Route to add a message to the user's data.
+    Requires the user to be authenticated using a Firebase token.
+    """
+    # Retrieve the Firebase ID token from the Authorization header
+    id_token = request.headers.get('Authorization')
+
+    if not id_token:
+        return jsonify({"error": "Missing Firebase ID token"}), 401
+
+    try:
+        # Verify the Firebase ID token
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token['uid']
+
+        # Get the message from the request body
+        message_data = request.json
+        if not message_data or 'message' not in message_data:
+            return jsonify({"error": "Missing 'message' in request body"}), 400
+
+        message = message_data['message']
+
+        # Store the message in Firestore under the user's collection
+        if db:
+            user_ref = db.collection('users').document(user_id)
+            user_ref.update({
+                'messages': firestore.ArrayUnion([message])
+            })
+            return jsonify({"success": True, "message": "Message added successfully"}), 200
+        else:
+            return jsonify({"error": "Firestore database is not initialized"}), 500
+    except auth.InvalidIdTokenError:
+        return jsonify({"error": "Invalid Firebase ID token"}), 401
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 3000))  # Default to port 3000 if not specified
