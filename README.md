@@ -19,6 +19,4 @@ pip install collaborative-article-sharing
 
 ### Commands
 
-For detailed instructions on using the CLI, please refer to its specific README file:
-
-[CLI README](./CLI/README.md)
+For detailed instructions on using the CLI, please refer to [its specific README file](./CLI/README.md)
