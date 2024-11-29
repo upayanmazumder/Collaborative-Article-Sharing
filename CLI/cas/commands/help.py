@@ -11,5 +11,8 @@ Usage:
     cas auth                                    Start authentication process.
     cas push <article-link> [-m <message>]      Add an article with an optional message.
     cas pull                                    Retrieve your articles.
+    cas group:create                            Create a group.
+    cas group:delete                            Delete a group.
+    cas group:privacy                           Change group privacy
 """, style="bold cyan")
     console.print(help_text)

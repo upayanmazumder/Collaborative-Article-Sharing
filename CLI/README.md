@@ -18,3 +18,12 @@ A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Arti
 
 - **`cas pull`**  
   Retrieves your saved articles.
+
+- **`cas group:create`**
+  Create a group
+
+- **`cas group:delete`**
+  Delete a group
+
+- **`cas group:privacy`**
+  Change a group's privacy settings
