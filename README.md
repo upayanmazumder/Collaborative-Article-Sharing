@@ -19,8 +19,6 @@ pip install collaborative-article-sharing
 
 ### Commands
 
-- **`cas help`**: Displays all available commands.  
-- **`cas auth`**: Authenticates the user.  
-- **`cas push <article>`**: Pushes a new article to the system.  
-- **`cas pull`**: Retrieves all shared articles.  
-- **`cas info`**: Provides project information.  
+For detailed instructions on using the CLI, please refer to its specific README file:
+
+[CLI README](./CLI/README.md)
