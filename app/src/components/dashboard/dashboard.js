@@ -1,76 +1,57 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { auth } from '../../../shared/firebase';
+import Logout from '../auth/logout/logout';
 import styles from './dashboard.module.css';
-import Image from 'next/image';
-import { onAuthStateChanged } from 'firebase/auth';
-import firebase from '../../../shared/firebase';
 
-export default function Home() {
-  const {auth} = firebase;
-  const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const Dashboard = () => {
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        // Listen for auth state changes (sign-in or sign-out)
-        onAuthStateChanged(auth, async (user) => {
-          if (user) {
-            const idToken = await user.getIdToken();
-
-            const response = await fetch('https://api.cas.upayan.dev/pull', {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${idToken}`,
-              },
-            });
-
-            if (!response.ok) {
-              throw new Error('Failed to fetch articles');
-            }
-
-            const data = await response.json();
-            if (data.success) {
-              setArticles(data.articles);
-            } else {
-              setError('No articles found');
-            }
-          } else {
-            setError('User is not signed in');
-          }
-        });
-      } catch (err) {
-        setError(err.message || 'An error occurred while fetching articles');
-      } finally {
-        setLoading(false);
+    // Listen to authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push('/auth'); // Redirect to auth page if no user is logged in
       }
-    };
+    });
 
-    fetchArticles();
-  }, [setArticles, setError, setLoading]);
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      router.push('/auth'); // Redirect to auth page after logout
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
+  };
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        {loading ? (
-          <p>Loading articles...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : articles.length === 0 ? (
-          <p>No articles available</p>
-        ) : (
-          <div>
-            <h2>Your Articles</h2>
-            <ul>
-              {articles.map((article, index) => (
-                <li key={index}>{article}</li>
-              ))}
-            </ul>
+    <div className={styles.dashboardContainer}>
+      {user ? (
+        <div>
+          <h2 className={styles.dashboardHeader}>Welcome to your Dashboard, {user.email}</h2>
+          <div className={styles.dashboardContent}>
+            <p className={styles.dashboardMessage}>Here you can manage your account, settings, and more.</p>
+            <br />
+            <Logout onLogout={handleLogout} />
           </div>
-        )}
-      </main>
+        </div>
+      ) : (
+        <div>
+          <h2 className={styles.dashboardHeader}>Loading...</h2>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Dashboard;
