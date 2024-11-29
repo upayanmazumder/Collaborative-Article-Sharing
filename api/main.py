@@ -66,12 +66,15 @@ except Exception as e:
 try:
     from auth.signup import signup_bp
     from auth.login import login_bp
+    from auth.group.create import create_group_bp 
 
     app.register_blueprint(signup_bp)
     app.register_blueprint(login_bp)
+    app.register_blueprint(create_group_bp)
     print("Auth blueprints registered successfully.")
 except ImportError as e:
     print(f"Error importing blueprints: {e}")
+
 
 @app.route('/')
 def home():
