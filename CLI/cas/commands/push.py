@@ -1,6 +1,6 @@
 from rich.console import Console
 import requests
-from session_utils import load_session_details, is_valid_url
+from ..session_utils import load_session_details, is_valid_url
 
 console = Console()
 

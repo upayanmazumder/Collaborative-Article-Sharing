@@ -1,7 +1,7 @@
 import webbrowser
 from flask import Flask, Blueprint, request, redirect
 from rich.console import Console
-from session_utils import save_session_details
+from ..session_utils import save_session_details
 import threading
 import os
 import sys

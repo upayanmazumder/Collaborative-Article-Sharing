@@ -1,6 +1,6 @@
 from rich.console import Console
 import requests
-from session_utils import load_session_details
+from ..session_utils import load_session_details
 
 console = Console()
 
