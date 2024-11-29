@@ -10,3 +10,4 @@ dist
 CLI/cas/session_details.json
 CLI/cas/session.json
 CLI/venv
+session.json
