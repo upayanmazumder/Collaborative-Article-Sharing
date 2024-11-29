@@ -1,14 +1,14 @@
 import sys
 from rich.console import Console
-from commands.auth import auth_command
-from commands.info import info_command
-from commands.help import help_command
-from commands.push import push_command
-from commands.pull import pull_command
-from commands.group_create import group_create_command
-from commands.group_delete import group_delete_command
-from commands.group_privacy import group_privacy_command
-from commands.group_list import group_list_command
+from .commands.auth import auth_command
+from .commands.info import info_command
+from .commands.help import help_command
+from .commands.push import push_command
+from .commands.pull import pull_command
+from .commands.group_create import group_create_command
+from .commands.group_delete import group_delete_command
+from .commands.group_privacy import group_privacy_command
+from .commands.group_list import group_list_command
 
 # Initialize Rich Console
 console = Console()
