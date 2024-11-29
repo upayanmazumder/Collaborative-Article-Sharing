@@ -44,7 +44,8 @@ def create_group():
             "group_leader": user_email,  # Store the creator's email as the group leader
             "created_by": user_id,
             "created_at": firestore.SERVER_TIMESTAMP,
-            "members": [user_email]  # Add the creator's email as the first member
+            "members": [user_email],  # Add the creator's email as the first member
+            "privacy":"private" # Private by default
         }
 
         # Save the group in Firestore
