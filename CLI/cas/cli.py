@@ -20,7 +20,7 @@ def add_message(message):
         print("Error: User is not logged in. Please log in first.")
         return
 
-    api_url = "https://api.cas.upayan.dev/add-message"  # Replace with your API's URL
+    api_url = "https://api.cas.upayan.dev/add-message"
     headers = {"Authorization": session_details["token"]}
     payload = {"message": message}
 
