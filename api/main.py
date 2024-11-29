@@ -4,6 +4,7 @@ from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from dotenv import load_dotenv
+from urllib.parse import urlparse
 
 # Load environment variables from the .env file
 if load_dotenv():
@@ -79,7 +80,7 @@ def home():
 @app.route('/push', methods=['POST'])
 def add_article():
     """
-    Route to add an article to the user's data.
+    Route to add an article (link) to the user's data.
     Requires the user to be authenticated using a Firebase token.
     """
     # Retrieve the Firebase ID token from the Authorization header
@@ -99,6 +100,11 @@ def add_article():
             return jsonify({"error": "Missing 'article' in request body"}), 400
 
         article = article_data['article']
+
+        # Check if the article is a valid URL
+        parsed_url = urlparse(article)
+        if not parsed_url.scheme or not parsed_url.netloc:
+            return jsonify({"error": "Invalid URL provided"}), 400
 
         # Store the article in Firestore under the user's collection
         if db:
