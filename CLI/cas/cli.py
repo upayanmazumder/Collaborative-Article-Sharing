@@ -1,83 +1,51 @@
 import argparse
-import json
-import os
-import requests
 import webbrowser
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import urllib.parse as urlparse
+import json
 
-# Next.js Site URL
-SITE_URL = "https://cas.upayan.dev"
+# Simple HTTP handler
+class RequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Parse query parameters
+        query = urlparse.urlparse(self.path).query
+        params = urlparse.parse_qs(query)
 
-def get_firebase_cli_token():
-    # Firebase CLI session file
-    firebase_config_path = os.path.expanduser("~/.config/firebase")
-    try:
-        with open(firebase_config_path, "r") as file:
-            config = json.load(file)
-            return config.get("tokens", {}).get("refresh_token", None)
-    except FileNotFoundError:
-        print("Firebase CLI session file not found. Please log in using `firebase login`.")
-        return None
-    except json.JSONDecodeError:
-        print("Error reading Firebase CLI session file.")
-        return None
+        # Extract session details
+        session_details = {
+            "email": params.get("email", [""])[0],
+            "token": params.get("token", [""])[0]
+        }
 
-def get_id_token(refresh_token):
-    # Exchange refresh token for an ID token
-    token_url = "https://securetoken.googleapis.com/v1/token?key=[FIREBASE_API_KEY]"
-    payload = {
-        "grant_type": "refresh_token",
-        "refresh_token": refresh_token
-    }
-    response = requests.post(token_url, data=payload)
-    if response.status_code == 200:
-        return response.json().get("id_token")
-    else:
-        print(f"Failed to exchange refresh token: {response.text}")
-        return None
+        # Store session details in a file
+        with open("session_details.json", "w") as file:
+            json.dump(session_details, file)
 
-def authenticate_with_site(id_token):
-    api_endpoint = f"{SITE_URL}/api/auth"
-    response = requests.post(api_endpoint, json={"idToken": id_token})
-    if response.status_code == 200:
-        print("Authentication successful!")
-        return response.cookies
-    else:
-        print(f"Authentication failed: {response.text}")
-        return None
+        # Send response to the browser
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"<h1>Authentication Successful!</h1><p>You can close this window.</p>")
 
-def open_site_with_session(cookies):
-    session = requests.Session()
-    session.cookies.update(cookies)
-    response = session.get(SITE_URL)
-    if response.status_code == 200:
-        with open("auth.html", "w") as file:
-            file.write(response.text)
-        webbrowser.open("auth.html")
-    else:
-        print(f"Failed to load site: {response.status_code}")
+        print("Session details saved:", session_details)
 
 def main():
-    parser = argparse.ArgumentParser(description="Authenticate and open site with session details.")
-    parser.add_argument("-e", "--email", required=True, help="Email address of the user")
+    parser = argparse.ArgumentParser(description="CLI for connecting to cas.upayan.dev.")
     args = parser.parse_args()
 
-    # Get Firebase CLI token
-    refresh_token = get_firebase_cli_token()
-    if not refresh_token:
-        return
+    # Start the HTTP server
+    server_address = ("localhost", 8000)
+    httpd = HTTPServer(server_address, RequestHandler)
+    print("Starting server on http://localhost:8000")
 
-    # Get ID token using the refresh token
-    id_token = get_id_token(refresh_token)
-    if not id_token:
-        return
+    # Open the browser
+    redirect_url = "http://localhost:8000"
+    connect_url = f"https://cas.upayan.dev/auth/connect?redirect_uri={redirect_url}"
+    print(f"Opening {connect_url} in the browser...")
+    webbrowser.open(connect_url)
 
-    # Authenticate with the Next.js site
-    cookies = authenticate_with_site(id_token)
-    if not cookies:
-        return
-
-    # Open the site with session details
-    open_site_with_session(cookies)
+    # Run the server
+    httpd.serve_forever()
 
 if __name__ == "__main__":
     main()
