@@ -3,8 +3,11 @@
 import { useEffect, useState } from 'react';
 import styles from './dashboard.module.css';
 import Image from 'next/image';
+import { onAuthStateChanged } from 'firebase/auth';
+import firebase from '../../../shared/firebase';
 
 export default function Home() {
+  const {auth} = firebase;
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,31 +15,32 @@ export default function Home() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const user = await firebase.auth().currentUser;
+        // Listen for auth state changes (sign-in or sign-out)
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            const idToken = await user.getIdToken();
 
-        if (user) {
-          const idToken = await user.getIdToken();
+            const response = await fetch('https://api.cas.upayan.dev/pull', {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${idToken}`,
+              },
+            });
 
-          const response = await fetch('https://api.cas.upayan.dev/pull', {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-          });
+            if (!response.ok) {
+              throw new Error('Failed to fetch articles');
+            }
 
-          if (!response.ok) {
-            throw new Error('Failed to fetch articles');
-          }
-
-          const data = await response.json();
-          if (data.success) {
-            setArticles(data.articles);
+            const data = await response.json();
+            if (data.success) {
+              setArticles(data.articles);
+            } else {
+              setError('No articles found');
+            }
           } else {
-            setError('No articles found');
+            setError('User is not signed in');
           }
-        } else {
-          setError('User is not signed in');
-        }
+        });
       } catch (err) {
         setError(err.message || 'An error occurred while fetching articles');
       } finally {
