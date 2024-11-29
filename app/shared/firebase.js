@@ -2,14 +2,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDgKhaEqjwzISMDZDJRgaly4nOw69pdXfs",
-    authDomain: "cas-main-d320b.firebaseapp.com",
-    projectId: "cas-main-d320b",
-    storageBucket: "cas-main-d320b.firebasestorage.app",
-    messagingSenderId: "379547223321",
-    appId: "1:379547223321:web:103ef731cf8f72d3703188",
-    measurementId: "G-Q0PX5SJ5JJ"
-};
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  };
+  
 
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
