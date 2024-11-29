@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../../shared/firebase';
 import styles from '../auth.module.css';
+import { useRouter } from 'next/navigation';  // Import the router to handle the redirection
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const router = useRouter();  // Use router for redirection
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -43,6 +45,9 @@ const Signup = () => {
 
       setSuccess(true);
       console.log('User created successfully:', userCredential.user);
+
+      // Only redirect after the user is signed up successfully
+      router.push('/dashboard'); // Redirect to dashboard after signup
     } catch (err) {
       console.error('Error signing up:', err);
       setError(err.message || 'Something went wrong');
