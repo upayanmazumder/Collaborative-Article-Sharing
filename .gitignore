@@ -8,6 +8,7 @@ __pycache__
 
 cas.egg-info
 dist
+CLI/collaborative_article_sharing.egg-info
 CLI/cas/session_details.json
 CLI/cas/session.json
 CLI/venv
