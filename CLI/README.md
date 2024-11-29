@@ -27,3 +27,8 @@ A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Arti
 
 - **`cas group:privacy`**
   Change a group's privacy settings
+
+- **`cas group:list`**
+  Get the list of public groups
+
+> For a full comprehensive list, use the help command

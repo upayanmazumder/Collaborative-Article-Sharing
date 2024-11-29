@@ -14,5 +14,6 @@ Usage:
     cas group:create                            Create a group.
     cas group:delete                            Delete a group.
     cas group:privacy                           Change group privacy
+    cas group:list                              List all groups.
 """, style="bold cyan")
     console.print(help_text)
