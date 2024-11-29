@@ -67,8 +67,9 @@ def add_message(message):
 def show_help():
     help_message = """
     Usage:
-        cli.py add-message <your-message>      Add a message to the database (requires login).
-        cli.py help                            Show this help message.
+        cas help                            Show this help message.
+        cas auth                            Start authentication process.
+        cas add-message <your-message>      Add a message to the database (requires login).
     """
     print(help_message)
 
@@ -78,19 +79,21 @@ def main():
         show_help()
     elif sys.argv[1] == "add-message":
         if len(sys.argv) < 3:
-            print("Usage: cli.py add-message <your-message>")
+            print("Usage: cas add-message <your-message>")
         else:
             message = " ".join(sys.argv[2:])
             add_message(message)
     elif sys.argv[1] == "help":
         show_help()
-    else:
+    elif sys.argv[1] == "auth":
         url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
         webbrowser.open(url)
         print("Starting server on http://localhost:8000")
         app = Flask(__name__)
         app.register_blueprint(auth_bp)
         app.run(port=8000)
+    else:
+        show_help()
 
 # Entry point for CLI commands
 if __name__ == "__main__":
