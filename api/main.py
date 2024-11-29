@@ -149,7 +149,6 @@ def get_articles():
             user_data = user_ref.get()
 
             if user_data.exists:
-                # Assuming articles are stored in a field called 'articles'
                 articles = user_data.to_dict().get('articles', [])
                 return jsonify({"success": True, "articles": articles}), 200
             else:
