@@ -1,34 +1,35 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../../shared/firebase"; // Adjust path as needed
 
 const Connect = () => {
   useEffect(() => {
     const authenticate = async () => {
       try {
-        const user = auth.currentUser;
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // Get the user's email and ID token
+            const email = user.email;
+            const token = await user.getIdToken();
 
-        if (user) {
-          // Get the user's email and ID token
-          const email = user.email;
-          const token = await user.getIdToken();
+            // Redirect to the provided redirect URI
+            const params = new URLSearchParams(window.location.search);
+            const redirectUri = params.get("redirect_uri");
 
-          // Redirect to the provided redirect URI
-          const params = new URLSearchParams(window.location.search);
-          const redirectUri = params.get("redirect_uri");
-
-          if (redirectUri) {
-            const redirectUrl = `${redirectUri}?email=${encodeURIComponent(
-              email
-            )}&token=${encodeURIComponent(token)}`;
-            window.location.href = redirectUrl;
+            if (redirectUri) {
+              const redirectUrl = `${redirectUri}?email=${encodeURIComponent(
+                email
+              )}&token=${encodeURIComponent(token)}`;
+              window.location.href = redirectUrl;
+            } else {
+              console.error("Missing redirect URI.");
+            }
           } else {
-            console.error("Missing redirect URI.");
+            console.error("No user is signed in.");
           }
-        } else {
-          console.error("No user is signed in.");
-        }
+        });
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
