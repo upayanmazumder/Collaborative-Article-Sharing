@@ -42,7 +42,7 @@ def favicon():
 # Add article function to interact with the API
 def add_article(article):
     """
-    Adds a article to the user's database entry using the API.
+    Adds an article to the user's database entry using the API.
     Ensures the user is logged in before proceeding.
     """
     session_details = load_session_details()
@@ -63,6 +63,35 @@ def add_article(article):
     except requests.RequestException as e:
         print("Error while communicating with the API:", e)
 
+# Pull articles function to interact with the API
+def pull_articles():
+    """
+    Retrieves the articles of the authenticated user from the API.
+    Ensures the user is logged in before proceeding.
+    """
+    session_details = load_session_details()
+    if not session_details or "email" not in session_details or "token" not in session_details:
+        print("Error: User is not logged in. Please log in first.")
+        return
+
+    api_url = "https://api.cas.upayan.dev/pull"
+    headers = {"Authorization": session_details["token"]}
+
+    try:
+        response = requests.get(api_url, headers=headers)
+        if response.status_code == 200:
+            articles = response.json().get("articles", [])
+            if articles:
+                print("Your Articles:")
+                for article in articles:
+                    print(f"- {article}")
+            else:
+                print("You have no articles.")
+        else:
+            print("Failed to retrieve articles. Error:", response.json())
+    except requests.RequestException as e:
+        print("Error while communicating with the API:", e)
+
 # Show help article
 def show_help():
     help_article = """
@@ -70,6 +99,7 @@ def show_help():
         cas help                            Show this help article.
         cas auth                            Start authentication process.
         cas push <article-link>             Add an article.
+        cas pull                            Retrieve your articles.
     """
     print(help_article)
 
@@ -83,6 +113,8 @@ def main():
         else:
             article = " ".join(sys.argv[2:])
             add_article(article)
+    elif sys.argv[1] == "pull":
+        pull_articles()
     elif sys.argv[1] == "help":
         show_help()
     elif sys.argv[1] == "auth":
