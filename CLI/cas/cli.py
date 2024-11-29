@@ -1,9 +1,9 @@
 import os
 import json
 import webbrowser
-from flask import Flask, Blueprint, request, jsonify
-import requests
 import sys
+import requests
+from flask import Flask, Blueprint, request, jsonify
 
 # Define the auth blueprint and session management functions
 auth_bp = Blueprint("auth", __name__)
@@ -38,12 +38,6 @@ def handle_auth_response():
 def favicon():
     return "", 200  # Prevent favicon requests from interfering
 
-# Initialize Flask app
-app = Flask(__name__)
-
-# Register the auth blueprint
-app.register_blueprint(auth_bp)
-
 # Add message function to interact with the API
 def add_message(message):
     """
@@ -68,8 +62,8 @@ def add_message(message):
     except requests.RequestException as e:
         print("Error while communicating with the API:", e)
 
-# Main execution flow
-if __name__ == "__main__":
+# Main function to handle CLI and web server logic
+def main():
     if len(sys.argv) > 1 and sys.argv[1] == "add-message":
         if len(sys.argv) < 3:
             print("Usage: cli.py add-message <your-message>")
@@ -80,4 +74,10 @@ if __name__ == "__main__":
         url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
         webbrowser.open(url)
         print("Starting server on http://localhost:8000")
+        app = Flask(__name__)
+        app.register_blueprint(auth_bp)
         app.run(port=8000)
+
+# Entry point for CLI commands
+if __name__ == "__main__":
+    main()
