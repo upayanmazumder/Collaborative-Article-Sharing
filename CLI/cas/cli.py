@@ -54,7 +54,7 @@ def is_valid_url(url):
     )
     return re.match(url_regex, url) is not None
 
-def add_article(article):
+def add_article(article, message=None):
     if not is_valid_url(article):
         console.print("[bold red]❌ Error:[/] The provided article is not a valid link.")
         return
@@ -67,6 +67,9 @@ def add_article(article):
     api_url = "https://api.cas.upayan.dev/push"
     headers = {"Authorization": session_details["token"]}
     payload = {"article": article}
+    
+    if message:  # Add the message to the payload if provided
+        payload["message"] = message
 
     try:
         response = requests.post(api_url, json=payload, headers=headers)
@@ -139,10 +142,21 @@ def main():
         show_help()
     elif sys.argv[1] == "push":
         if len(sys.argv) < 3:
-            console.print("[bold red]Usage: cas push <article-link>[/]")
+            console.print("[bold red]Usage: cas push <article-link> [-m <message>][/]")
         else:
-            article = " ".join(sys.argv[2:])
-            add_article(article)
+            article = None
+            message = None
+
+            # Parse the arguments for the article link and optional message
+            args = sys.argv[2:]
+            if "-m" in args:
+                m_index = args.index("-m")
+                article = " ".join(args[:m_index])
+                message = " ".join(args[m_index + 1:])
+            else:
+                article = " ".join(args)
+
+            add_article(article, message)
     elif sys.argv[1] == "pull":
         pull_articles()
     elif sys.argv[1] == "help":
@@ -158,6 +172,7 @@ def main():
         show_info()
     else:
         show_help()
+
 
 if __name__ == "__main__":
     main()
