@@ -78,7 +78,7 @@ def home():
     return "Welcome to the Flask App"
 
 
-@app.route('/add-message', methods=['POST'])
+@app.route('/push', methods=['POST'])
 def add_message():
     """
     Route to add a message to the user's data.

@@ -6,6 +6,8 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         Congrats on connecting your CLI!
+
+
       </main>
     </div>
   );

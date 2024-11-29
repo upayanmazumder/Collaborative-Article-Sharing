@@ -33,7 +33,7 @@ def handle_auth_response():
         print("Invalid or empty session details, skipping update.")
 
     # Redirect user to the success page after successful auth
-    return redirect("https://cas.upayan.dev/connect/success")
+    return redirect("https://cas.upayan.dev/auth/connect/success")
 
 @auth_bp.route("/favicon.ico")
 def favicon():
@@ -50,7 +50,7 @@ def add_message(message):
         print("Error: User is not logged in. Please log in first.")
         return
 
-    api_url = "https://api.cas.upayan.dev/add-message"
+    api_url = "https://api.cas.upayan.dev/push"
     headers = {"Authorization": session_details["token"]}
     payload = {"message": message}
 
@@ -69,7 +69,7 @@ def show_help():
     Usage:
         cas help                            Show this help message.
         cas auth                            Start authentication process.
-        cas add-message <your-message>      Add a message to the database (requires login).
+        cas push <article-link>             Add an article.
     """
     print(help_message)
 
@@ -77,9 +77,9 @@ def show_help():
 def main():
     if len(sys.argv) < 2:
         show_help()
-    elif sys.argv[1] == "add-message":
+    elif sys.argv[1] == "push":
         if len(sys.argv) < 3:
-            print("Usage: cas add-message <your-message>")
+            print("Usage: cas push <article-link>")
         else:
             message = " ".join(sys.argv[2:])
             add_message(message)
