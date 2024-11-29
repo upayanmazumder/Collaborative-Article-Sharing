@@ -1,5 +1,6 @@
 .vscode/settings.json
 .env
+.env.local
 .venv
 
 firebase
@@ -11,3 +12,4 @@ CLI/cas/session_details.json
 CLI/cas/session.json
 CLI/venv
 session.json
+.env.local
