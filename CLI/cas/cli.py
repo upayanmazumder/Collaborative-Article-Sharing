@@ -34,7 +34,9 @@ def handle_auth_response():
     if email and token:
         session_details = {"email": email, "token": token}
         save_session_details(session_details)
-        console.print(f"[bold green]✔ Session details saved:[/] {session_details}")
+        console.print(f"[bold green]✔ Session details saved")
+        console.print(f"[bold blue]Email: [blue]{email}")
+        console.print("[bold purple]Authorization completed! [purple] You can now use cas pull,push etc..")
     else:
         console.print("[bold red]❌ Invalid or empty session details, skipping update.")
 
