@@ -20,3 +20,9 @@ pip install collaborative-article-sharing
 ### Commands
 
 For detailed instructions on using the CLI, please refer to [its specific README file](./CLI/README.md)
+
+### Ports
+
+APP : 3000
+API : 4000
+CLI Authentication : 8000

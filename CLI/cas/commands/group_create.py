@@ -2,6 +2,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 import requests
 from ..session_utils import load_session_details
+from ..cli import API_URL
 
 console = Console()
 
@@ -14,7 +15,7 @@ def group_create_command():
         console.print("[bold red]❌ Error: User is not logged in. Please log in first.[/]")
         return
 
-    api_url = "https://api.cas.upayan.dev/auth/group/create"
+    api_url = f"{API_URL}/auth/group/create"
     headers = {"Authorization": session_details["token"], "Content-Type": "application/json"}
 
     # Prompt the user for group details

@@ -10,9 +10,14 @@ from .commands.group_delete import group_delete_command
 from .commands.group_privacy import group_privacy_command
 from .commands.group_list import group_list_command
 from .session_utils import load_session_details
+import os
 
 # Initialize Rich Console
 console = Console()
+
+API_URL = "https://api.cas.upayan.dev"
+if os.getenv("ENV") == "development":
+    API_URL = "http://localhost:4000"
 
 def is_user_authenticated():
     session_details = load_session_details()

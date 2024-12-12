@@ -1,6 +1,7 @@
 from rich.console import Console
 import requests
 from ..session_utils import load_session_details, is_valid_url
+from ..cli import API_URL
 
 console = Console()
 
@@ -28,7 +29,7 @@ def push_command(args):
         console.print("[bold red]❌ Error: User is not logged in. Please log in first.[/]")
         return
 
-    api_url = "https://api.cas.upayan.dev/push"
+    api_url = f"{API_URL}/push"
     headers = {"Authorization": session_details["token"]}
     payload = {"article": article}
     if message:

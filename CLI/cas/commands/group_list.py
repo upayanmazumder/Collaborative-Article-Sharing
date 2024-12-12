@@ -1,6 +1,7 @@
 from rich.console import Console
 import requests
 from ..session_utils import load_session_details
+from ..cli import API_URL
 
 console = Console()
 
@@ -13,7 +14,7 @@ def group_list_command():
         console.print("[bold red]❌ Error: User is not logged in. Please log in first.[/]")
         return
 
-    api_url = "https://api.cas.upayan.dev/auth/group/list"
+    api_url = f"{API_URL}/auth/group/list"
     headers = {"Authorization": session_details["token"]}
 
     try:

@@ -170,5 +170,5 @@ def get_articles():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(3000)
+    port = int(4000)
     app.run(debug=True, port=port)

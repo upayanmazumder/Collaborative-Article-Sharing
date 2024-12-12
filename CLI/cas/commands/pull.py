@@ -2,6 +2,7 @@ from rich.console import Console
 from rich.table import Table
 import requests
 from ..session_utils import load_session_details
+from ..cli import API_URL
 
 console = Console()
 
@@ -11,7 +12,7 @@ def pull_command():
         console.print("[bold red]❌ Error: User is not logged in. Please log in first.[/]")
         return
 
-    api_url = "https://api.cas.upayan.dev/pull"
+    api_url = f"{API_URL}/pull"
     headers = {"Authorization": session_details["token"]}
 
     try:
