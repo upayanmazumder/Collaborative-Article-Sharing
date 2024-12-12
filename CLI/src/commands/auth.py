@@ -1,7 +1,7 @@
 import webbrowser
 from flask import Flask, Blueprint, request, redirect
 from rich.console import Console
-from ..session_utils import save_session_details
+from ..session_utils import save_session_details, load_session_details
 import threading
 import os
 import sys
@@ -39,7 +39,15 @@ def run_server():
     app.register_blueprint(auth_bp)
     app.run(port=8000, use_reloader=False)  # Disable reloader to prevent duplicate shutdown signals
 
+def is_user_authenticated():
+    session_details = load_session_details()
+    return session_details is not None
+
 def auth_command():
+    if is_user_authenticated():
+        console.print("[bold green]✔ User is already authenticated. Proceed with your command.")
+        return
+
     url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
     webbrowser.open(url)
     console.print("[bold green]Starting server on [link=http://localhost:8000]http://localhost:8000[/link]")
@@ -61,4 +69,7 @@ def auth_command():
             time.sleep(1)
     except KeyboardInterrupt:
         console.print("[bold red]❌ Server interrupted by user.")
+        os._exit(1)
+    except Exception as e:
+        console.print(f"[bold red]❌ Error: {str(e)}")
         os._exit(1)
