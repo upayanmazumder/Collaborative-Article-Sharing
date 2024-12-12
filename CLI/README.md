@@ -32,3 +32,15 @@ A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Arti
   Get the list of public groups
 
 > For a full comprehensive list, use the help command
+
+To run the CLI tool, first navigate to the CLI folder using the command:
+
+```sh
+cd /d:/upayanmazumder/Collaborative-Article-Sharing/CLI
+```
+
+Then, execute the following command to start the CLI:
+
+```sh
+python -m src.cli
+```
