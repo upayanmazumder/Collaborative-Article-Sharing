@@ -35,28 +35,29 @@ def main():
             return
 
         # Command dispatch
-        if command == "auth":
-            auth_command()
-        elif command == "logout":
-            logout_command()
-        elif command == "info":
-            info_command()
-        elif command == "help":
-            help_command()
-        elif command == "push":
-            push_command(sys.argv[2:])
-        elif command == "pull":
-            pull_command()
-        elif command == "group:create":
-            group_create_command()
-        elif command == "group:delete":
-            group_delete_command()
-        elif command == "group:privacy":
-            group_privacy_command()
-        elif command == "group:list":
-            group_list_command()
-        else:
-            console.print("[bold red]❌ Unknown command. Use 'cas help' for a list of commands.[/]")
+        match command:
+            case "auth":
+                auth_command()
+            case "logout":
+                logout_command()
+            case "info":
+                info_command()
+            case "help":
+                help_command()
+            case "push":
+                push_command(sys.argv[2:])
+            case "pull":
+                pull_command()
+            case "group:create":
+                group_create_command()
+            case "group:delete":
+                group_delete_command()
+            case "group:privacy":
+                group_privacy_command()
+            case "group:list":
+                group_list_command()
+            case _:
+                console.print("[bold red]❌ Unknown command. Use 'cas help' for a list of commands.[/]")
 
 if __name__ == "__main__":
     main()
