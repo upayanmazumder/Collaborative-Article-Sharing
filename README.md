@@ -1,5 +1,7 @@
 # Collaborative-Article-Sharing
 
+<space><img src='https://cas.upayan.dev/favicon.ico' height=50px>
+
 A collaborative article-sharing system for seamless content exchange and engagement.
 
 ## Links
@@ -23,6 +25,8 @@ For detailed instructions on using the CLI, please refer to [its specific README
 
 ### Ports
 
-APP : 3000
-API : 4000
-CLI Authentication : 8000
+| Service | Port |
+|---------|------|
+| APP | 3000 |
+| API | 4000 |
+| CLI Authentication | 8000 |
