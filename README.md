@@ -45,13 +45,13 @@ For detailed instructions on using the CLI, refer to its [README file](./CLI/REA
 
 ### Package Installation
 
-- For the **API** folder, navigate to the `api` directory and run:
+- For the **APP** folder, navigate to the `app` directory and run:
 
   ```bash
   npm install
   ```
 
-- For the **APP** and **CLI** folders, navigate to their directories and run:
+- For the **API** and **CLI** folders, navigate to their directories and run:
 
   ```bash
   pip install -r requirements.txt

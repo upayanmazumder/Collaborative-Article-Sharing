@@ -44,5 +44,7 @@ cd /d:/upayanmazumder/Collaborative-Article-Sharing/CLI
 Then, execute the following command to start the CLI:
 
 ```sh
-python -m src.cli
+pip install -e .
 ```
+
+Once build completes, use the `cas` command
