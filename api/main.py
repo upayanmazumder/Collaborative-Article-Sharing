@@ -84,7 +84,7 @@ except ImportError as e:
 
 @app.route('/')
 def home():
-    return "Welcome to the Flask App"
+    return "Welcome to the CAS API"
 
 @app.route('/push', methods=['POST'])
 def add_article():
