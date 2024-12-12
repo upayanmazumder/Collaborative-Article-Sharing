@@ -2,7 +2,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 import requests
 from ..session_utils import load_session_details
-from ..cli import API_URL
+from ..constants import API_URL
 
 console = Console()
 

@@ -15,10 +15,6 @@ import os
 # Initialize Rich Console
 console = Console()
 
-API_URL = "https://api.cas.upayan.dev"
-if os.getenv("ENV") == "development":
-    API_URL = "http://localhost:4000"
-
 def is_user_authenticated():
     session_details = load_session_details()
     if not session_details:

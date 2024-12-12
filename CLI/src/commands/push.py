@@ -1,7 +1,7 @@
 from rich.console import Console
 import requests
 from ..session_utils import load_session_details, is_valid_url
-from ..cli import API_URL
+from ..constants import API_URL
 
 console = Console()
 
