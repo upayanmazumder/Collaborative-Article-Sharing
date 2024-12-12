@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { auth } from '../../../shared/firebase';
-import Logout from '../auth/logout/logout';
 import styles from './dashboard.module.css';
 
 const Dashboard = () => {
@@ -40,9 +39,16 @@ const Dashboard = () => {
         <div>
           <h2 className={styles.dashboardHeader}>Welcome to your Dashboard, {user.email}</h2>
           <div className={styles.dashboardContent}>
-            <p className={styles.dashboardMessage}>Here you can manage your account, settings, and more.</p>
+            <p className={styles.dashboardMessage}>
+              Here you can manage your account, settings, and more.
+            </p>
             <br />
-            <Logout onLogout={handleLogout} />
+            <button
+              className={styles.logoutButton}
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
           </div>
         </div>
       ) : (

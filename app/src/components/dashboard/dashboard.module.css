@@ -1,153 +1,166 @@
-  .authContainer {
+/* General Container Styling */
+.dashboardContainer {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Gradient background */
+  color: #f5f5f5;
+  /* Slightly lighter text for better contrast */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 1s ease-in-out;
+  transition: all 0.3s ease;
+  text-align: center;
+  /* Ensures proper centering of text */
+}
 
-    --primary-bg: #0d1117;
-    --primary-accent: #1f6feb;
-    --secondary-accent: #58a6ff;
-    --text-primary: #c9d1d9;
-    --text-secondary: #8b949e;
-    --error-color: #ff7b72;
-    --success-color: #56d364;
-    --button-hover: #30363d;
+/* Header Styling */
+.dashboardHeader {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: bold;
+  color: #64b5f6;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: bounceIn 1s ease-out;
+}
 
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto;
-    padding: 20px;
-    max-width: 95%;
-    width: 400px;
-    background-color: var(--primary-bg);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    animation: fadeIn 0.5s ease-in-out;
+/* Content Styling */
+.dashboardContent {
+  background: rgba(28, 28, 28, 0.9);
+  margin: auto;
+  border: 1px solid #64b5f6;
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.8s ease-in-out;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboardMessage {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: 20px;
+  color: #b0bec5;
+}
+
+/* Button Styling */
+.logoutButton {
+  padding: 15px 25px;
+  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  border: none;
+  border-radius: 12px;
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.logoutButton:hover {
+  background: linear-gradient(135deg, #42a5f5, #1e88e5);
+  transform: scale(1.1) rotate(-1deg);
+}
+
+.logoutButton:active {
+  transform: scale(0.95) rotate(1deg);
+}
+
+/* Loading State */
+.dashboardLoading {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: #e0e0e0;
+  text-align: center;
+  animation: pulse 1.5s infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .authHeader {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 20px;
-    text-align: center;
+
+  to {
+    opacity: 1;
   }
-  
-  .authMessage {
-    font-size: 16px;
-    color: var(--text-secondary);
-    margin-top: 15px;
-    text-align: center;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
   }
-  
-  .success {
-    color: var(--success-color);
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
-  
-  .error {
-    color: var(--error-color);
+}
+
+@keyframes bounceIn {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
   }
-  
-  .authForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
+
+  40% {
+    transform: translateY(-15px);
   }
-  
-  .authForm label {
-    font-size: 14px;
-    color: var(--text-secondary);
+
+  60% {
+    transform: translateY(-10px);
   }
-  
-  .authForm input {
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboardContainer {
     padding: 10px;
-    font-size: 14px;
-    color: var(--text-primary);
-    background-color: #161b22;
-    border: 1px solid var(--primary-accent);
-    border-radius: 6px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
   }
-  
-  .authForm input:focus {
-    border-color: var(--secondary-accent);
-    box-shadow: 0 0 4px var(--secondary-accent);
+
+  .dashboardContent {
+    padding: 15px;
+    margin: 10px;
   }
-  
-  .authForm button {
-    padding: 12px 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-    background-color: var(--primary-accent);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+
+  .dashboardMessage {
+    font-size: 1rem;
   }
-  
-  .authForm button:hover {
-    background-color: var(--secondary-accent);
+
+  .logoutButton {
+    padding: 12px 18px;
   }
-  
-  .toggleContainer {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 15px;
+}
+
+@media (max-width: 480px) {
+  .dashboardHeader {
+    font-size: 1.5rem;
   }
-  
-  .button {
-    flex: 1;
-    padding: 10px 0;
-    margin: 0 5px;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    border: 1px solid var(--primary-accent);
-    border-radius: 6px;
-    background: transparent;
-    color: var(--primary-accent);
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+
+  .logoutButton {
+    padding: 10px 15px;
   }
-  
-  .button:hover {
-    background-color: var(--button-hover);
-    color: var(--secondary-accent);
-  }
-  
-  .active {
-    background-color: var(--primary-accent);
-    color: #fff;
-    border: none;
-  }
-  
-  @media (max-width: 768px) {
-    .authContainer {
-      width: 100%;
-      padding: 15px;
-    }
-  
-    .authHeader {
-      font-size: 20px;
-    }
-  
-    .button {
-      font-size: 13px;
-    }
-  }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+}

@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { auth } from '../../../shared/firebase';
-import Login from './login/login';
-import Signup from './signup/signup';
-import Logout from './logout/logout';
 import styles from './auth.module.css';
+import { NEXT_PUBLIC_API_URL } from '../../../shared/api';
 
 const Auth = () => {
   const [user, setUser] = useState(null);
@@ -28,15 +26,122 @@ const Auth = () => {
     return () => unsubscribe();
   }, [router]);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      setUser(null);
-      setShowLogin(true); // Reset to Login view
-      router.push('/auth'); // Redirect to auth page
-    } catch (error) {
-      console.error('Logout failed:', error.message);
-    }
+  const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      setError('');
+      setSuccess(false);
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('User logged in:', userCredential.user);
+        setSuccess(true);
+      } catch (err) {
+        console.error('Error logging in:', err);
+        setError(err.message);
+      }
+    };
+
+    return (
+      <div>
+        <form className={styles.authForm} onSubmit={handleLogin}>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+        {success && <p className={`${styles.authMessage} ${styles.success}`}>Login successful!</p>}
+        {error && <p className={`${styles.authMessage} ${styles.error}`}>{error}</p>}
+      </div>
+    );
+  };
+
+  const Signup = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    const handleSignup = async (e) => {
+      e.preventDefault();
+      setError('');
+      setSuccess(false);
+
+      try {
+        // Step 1: Send request to the API to sign up
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/signup`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+
+        const data = await response.json();
+        console.log('API Response:', data);
+
+        if (!response.ok) {
+          setError(data.error || 'Failed to sign up in API');
+          return; // Exit if API call fails
+        }
+
+        // Step 2: If API call is successful, proceed with Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('User signed up with Firebase:', userCredential.user);
+
+        setSuccess(true);
+        console.log('User created successfully:', userCredential.user);
+
+        // Only redirect after the user is signed up successfully
+        router.push('/dashboard'); // Redirect to dashboard after signup
+      } catch (err) {
+        console.error('Error signing up:', err);
+        setError(err.message || 'Something went wrong');
+      }
+    };
+
+    return (
+      <div>
+        <form className={styles.authForm} onSubmit={handleSignup}>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+        {success && <p className={`${styles.authMessage} ${styles.success}`}>Sign up successful!</p>}
+        {error && <p className={`${styles.authMessage} ${styles.error}`}>{error}</p>}
+      </div>
+    );
   };
 
   return (
@@ -44,17 +149,12 @@ const Auth = () => {
       {user ? (
         <div>
           <h2 className={styles.authHeader}>Welcome, {user.email}</h2>
-          <p className={styles.authMessage}>
-            You are already signed in.
-          </p>
+          <p className={styles.authMessage}>You are already signed in.</p>
           <br />
-          <Logout onLogout={handleLogout} />
         </div>
       ) : (
         <div>
-          <h2 className={styles.authHeader}>
-            {showLogin ? 'Login' : 'Signup'}
-          </h2>
+          <h2 className={styles.authHeader}>{showLogin ? 'Login' : 'Signup'}</h2>
           <div className={styles.toggleContainer}>
             <button
               className={`${styles.button} ${showLogin ? styles.active : ''}`}
