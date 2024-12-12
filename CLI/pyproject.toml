@@ -15,7 +15,11 @@ requires-python = ">=3.7"
 dependencies = ["requests", "argparse", "rich", "flask"]
 
 [tool.setuptools.packages.find]
-include = ["cas", "cas.commands"]
+include = ["src", "src.commands"]
 
 [project.scripts]
-cas = "cas.cli:main"
+cas = "src.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/upayanmazumder/collaborative-Article-Sharing"
+Issues = "https://github.com/upayanmazumder/Collaborative-Article-Sharing/issues"
