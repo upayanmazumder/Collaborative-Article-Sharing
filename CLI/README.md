@@ -4,6 +4,8 @@ A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Arti
 
 ### Available Commands
 
+> For a full comprehensive list, use the help command
+
 - **`cas info`**  
   Displays project and developer information.
 
@@ -31,7 +33,7 @@ A Command-Line Interface (CLI) tool for interacting with the [Collaborative-Arti
 - **`cas group:list`**
   Get the list of public groups
 
-> For a full comprehensive list, use the help command
+### Development
 
 To run the CLI tool, first navigate to the CLI folder using the command:
 
