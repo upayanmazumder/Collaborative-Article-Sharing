@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../../shared/firebase';
 import styles from '../auth.module.css';
-import { useRouter } from 'next/navigation';  // Import the router to handle the redirection
+import { useRouter } from 'next/navigation';
+import { NEXT_PUBLIC_API_URL } from '../../../../shared/api';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ const Signup = () => {
 
     try {
       // Step 1: Send request to the API to sign up
-      const response = await fetch('https://api.cas.upayan.dev/auth/signup', {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

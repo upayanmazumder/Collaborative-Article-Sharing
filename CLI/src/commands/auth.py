@@ -6,6 +6,7 @@ import threading
 import os
 import sys
 import time
+from ..constants import APP_URL
 
 # Flask and Console initialization
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def handle_auth_response():
     # Exit the server after completing the task
     shutdown_flag_file = "shutdown_flag.tmp"
     open(shutdown_flag_file, "w").close()  # Create a flag file to signal shutdown
-    return redirect("https://cas.upayan.dev/auth/connect/success")
+    return redirect(f"{APP_URL}/auth/connect/success")
 
 @auth_bp.route("/favicon.ico")
 def favicon():
@@ -40,7 +41,7 @@ def run_server():
     app.run(port=8000, use_reloader=False)  # Disable reloader to prevent duplicate shutdown signals
 
 def auth_command():
-    url = "https://cas.upayan.dev/auth/connect?redirect_uri=http://localhost:8000"
+    url = f"{APP_URL}/auth/connect?redirect_uri=http://localhost:8000"
     webbrowser.open(url)
     console.print("[bold green]Starting server on [link=http://localhost:8000]http://localhost:8000[/link]")
 
