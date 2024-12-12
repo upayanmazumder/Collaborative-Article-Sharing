@@ -14,6 +14,10 @@ def save_session_details(details):
     with open(session_file, "w") as f:
         json.dump(details, f)
 
+def clear_session_details():
+    if os.path.exists(session_file):
+        os.remove(session_file)
+
 def is_valid_url(url):
     url_regex = re.compile(
         r'^(https?:\/\/)?'

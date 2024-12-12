@@ -1,6 +1,7 @@
 import sys
 from rich.console import Console
 from .commands.auth import auth_command
+from .commands.logout import logout_command
 from .commands.info import info_command
 from .commands.help import help_command
 from .commands.push import push_command
@@ -36,6 +37,8 @@ def main():
         # Command dispatch
         if command == "auth":
             auth_command()
+        elif command == "logout":
+            logout_command()
         elif command == "info":
             info_command()
         elif command == "help":

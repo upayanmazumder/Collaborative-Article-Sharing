@@ -24,6 +24,10 @@ def handle_auth_response():
         save_session_details(session_details)
         console.print(f"[bold green]✔ Session details saved")
         console.print(f"[bold blue]Email: [blue]{email}")
+
+        # Signal success by creating a flag file
+        with open("success_flag.tmp", "w") as flag_file:
+            flag_file.write("success")
     else:
         console.print("[bold red]❌ Invalid or empty session details, skipping update.")
 
@@ -51,14 +55,20 @@ def auth_command():
     server_thread.start()
 
     shutdown_flag_file = "shutdown_flag.tmp"
+    success_flag_file = "success_flag.tmp"
 
     try:
         while True:
             if os.path.exists(shutdown_flag_file):
                 os.remove(shutdown_flag_file)  # Cleanup the flag file
-                console.print("[bold purple]Authorization completed!")
-                console.print("[bold green]✔ Authentication server terminated. You may now use the CLI.")
+
+                if os.path.exists(success_flag_file):
+                    os.remove(success_flag_file)  # Cleanup the success flag
+                    console.print("[bold purple]Authorization completed!")
+                    console.print("[bold green]✔ Authentication server terminated. You may now use the CLI.")
+
                 os._exit(0)  # Terminate the program
+
             time.sleep(1)
     except KeyboardInterrupt:
         console.print("[bold red]❌ Server interrupted by user.")
