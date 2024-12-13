@@ -28,13 +28,13 @@ def handle_auth_response():
         # Signal success by creating a flag file
         with open("success_flag.tmp", "w") as flag_file:
             flag_file.write("success")
+        return redirect(f"{APP_URL}/auth/connect/success")
     else:
-        console.print("[bold red]❌ Invalid or empty session details, skipping update.")
-
-    # Exit the server after completing the task
-    shutdown_flag_file = "shutdown_flag.tmp"
-    open(shutdown_flag_file, "w").close()  # Create a flag file to signal shutdown
-    return redirect(f"{APP_URL}/auth/connect/success")
+        console.print("[bold red]❌ Invalid or empty session details.")
+        # Signal failure by creating a flag file
+        with open("failure_flag.tmp", "w") as flag_file:
+            flag_file.write("failure")
+        return redirect(f"{APP_URL}/auth/connect/failure")
 
 @auth_bp.route("/favicon.ico")
 def favicon():
@@ -43,7 +43,6 @@ def favicon():
 def run_server():
     app.register_blueprint(auth_bp)
     app.run(port=8000, use_reloader=False)  # Disable reloader to prevent duplicate shutdown signals
-
 def auth_command():
     url = f"{APP_URL}/auth/connect?redirect_uri=http://localhost:8000"
     webbrowser.open(url)
@@ -56,6 +55,7 @@ def auth_command():
 
     shutdown_flag_file = "shutdown_flag.tmp"
     success_flag_file = "success_flag.tmp"
+    failure_flag_file = "failure_flag.tmp"
 
     try:
         while True:
@@ -67,6 +67,11 @@ def auth_command():
                     console.print("[bold purple]Authorization completed!")
                     console.print("[bold green]✔ Authentication server terminated. You may now use the CLI.")
 
+                if os.path.exists(failure_flag_file):
+                    os.remove(failure_flag_file)  # Cleanup the failure flag
+                    console.print("[bold red]❌ Authentication failed.")
+                    console.print("[bold yellow]Please log in to the website and try again.")
+                
                 os._exit(0)  # Terminate the program
 
             time.sleep(1)

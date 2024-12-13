@@ -27,11 +27,14 @@ const Connect = () => {
               console.error("Missing redirect URI.");
             }
           } else {
-            console.error("No user is signed in.");
+            // Redirect to failure page if no user is signed in
+            window.location.href = "/auth/connect/failure";
           }
         });
       } catch (error) {
         console.error("Error fetching user details:", error);
+        // Redirect to failure page on error
+        window.location.href = "/auth/connect/failure";
       }
     };
 
