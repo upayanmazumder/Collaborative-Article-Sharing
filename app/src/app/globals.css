@@ -40,3 +40,8 @@ a {
     color-scheme: dark;
   }
 }
+
+code {
+  font-family: monospace;
+  padding: 50px;
+}
