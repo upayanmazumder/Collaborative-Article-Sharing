@@ -11,12 +11,11 @@ const Dashboard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Listen to authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
       } else {
-        router.push('/auth'); // Redirect to auth page if no user is logged in
+        router.push('/auth');
       }
     });
 
@@ -27,7 +26,7 @@ const Dashboard = () => {
     try {
       await signOut(auth);
       setUser(null);
-      router.push('/auth'); // Redirect to auth page after logout
+      router.push('/auth');
     } catch (error) {
       console.error('Logout failed:', error.message);
     }

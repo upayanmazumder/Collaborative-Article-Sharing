@@ -9,15 +9,13 @@ import { NEXT_PUBLIC_API_URL } from '../../../shared/api';
 
 const Auth = () => {
   const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(true); // Control which form to display
+  const [showLogin, setShowLogin] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Listen to authentication state changes
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
 
-      // Redirect to dashboard if logged in
       if (currentUser) {
         router.push('/dashboard');
       }
@@ -84,7 +82,6 @@ const Auth = () => {
       setSuccess(false);
 
       try {
-        // Step 1: Send request to the API to sign up
         const response = await fetch(`${NEXT_PUBLIC_API_URL}/auth/signup`, {
           method: 'POST',
           headers: {
@@ -101,18 +98,16 @@ const Auth = () => {
 
         if (!response.ok) {
           setError(data.error || 'Failed to sign up in API');
-          return; // Exit if API call fails
+          return;
         }
 
-        // Step 2: If API call is successful, proceed with Firebase Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         console.log('User signed up with Firebase:', userCredential.user);
 
         setSuccess(true);
         console.log('User created successfully:', userCredential.user);
 
-        // Only redirect after the user is signed up successfully
-        router.push('/dashboard'); // Redirect to dashboard after signup
+        router.push('/dashboard');
       } catch (err) {
         console.error('Error signing up:', err);
         setError(err.message || 'Something went wrong');

@@ -1,5 +1,4 @@
   .authContainer {
-
     --primary-bg: #0d1117;
     --primary-accent: #1f6feb;
     --secondary-accent: #58a6ff;
@@ -8,7 +7,6 @@
     --error-color: #ff7b72;
     --success-color: #56d364;
     --button-hover: #30363d;
-
     
     display: flex;
     flex-direction: column;
